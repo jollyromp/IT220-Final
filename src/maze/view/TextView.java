@@ -1,4 +1,5 @@
-package maze.view;/*
+package maze.view;
+/*
  * Caleb Snoozy
  * 6/1/2017
  * maze.view
@@ -10,7 +11,6 @@ import javafx.scene.control.TextArea;
 import maze.Driver;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class TextView extends TextArea {
 
@@ -24,7 +24,7 @@ public class TextView extends TextArea {
     // Text areas
     private String title = "TITLE";
     private String location = "LOCATION";
-    private String[] log = new String[TEXT_HEIGHT-1];
+    private String[] log = new String[TEXT_HEIGHT - 1];
 
     private ArrayList<String> lines = new ArrayList<>();
     private ArrayList<String> sideBar = new ArrayList<>();
@@ -38,8 +38,8 @@ public class TextView extends TextArea {
             sideBar.add("");
         }
 
-        lines.set(lines.size()-1, makeLine(TEXT_LOG_WIDTH));
-        sideBar.set(sideBar.size()-1, makeLine(TEXT_WIDTH - TEXT_LOG_WIDTH));
+        lines.set(lines.size() - 1, makeLine(TEXT_LOG_WIDTH));
+        sideBar.set(sideBar.size() - 1, makeLine(TEXT_WIDTH - TEXT_LOG_WIDTH));
 
         render();
     }
@@ -61,7 +61,7 @@ public class TextView extends TextArea {
         }
         builder.append(NL);
 
-        for (int j = lines.size()-1; j >= 0; j--) {
+        for (int j = lines.size() - 1; j >= 0; j--) {
             String line = lines.get(j);
             String data = sideBar.get(j);
             for (int i = 0; i < TEXT_LOG_WIDTH; i++) {
@@ -72,7 +72,7 @@ public class TextView extends TextArea {
             }
             builder.append(PIPE);
 
-            for (int i = 0; i < TEXT_WIDTH - TEXT_LOG_WIDTH; i++){
+            for (int i = 0; i < TEXT_WIDTH - TEXT_LOG_WIDTH; i++) {
                 if (data.length() > 0 && data.length() > i)
                     builder.append(data.charAt(i));
                 else
@@ -96,9 +96,9 @@ public class TextView extends TextArea {
         render();
     }
 
-    public void addToLog(String string){
+    public void addToLog(String string) {
         lines.add(0, string);
-        lines.remove(lines.size()-2);
+        lines.remove(lines.size() - 2);
         render();
     }
 
@@ -109,4 +109,6 @@ public class TextView extends TextArea {
         }
         return builder.toString();
     }
+
+
 }

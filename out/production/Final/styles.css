@@ -13,16 +13,12 @@
 }
 
 .text-field {
-    text-area-background: black;
     -fx-font-family: monospace;
-    -fx-text-fill: #FFFFFF;
+    -fx-text-fill: black;
+    -fx-prompt-text-fill: black;
     -fx-font-size: 14px;
-    -fx-background-color: black;
+    -fx-background-color: white;
     -fx-background-insets: -1px;
     -fx-border-insets: -1px;
     -fx-padding: -1px;
-}
-
-.text-field .content {
-    -fx-background-color: text-area-background;
 }

@@ -1,4 +1,5 @@
-package maze.game;/*
+package maze.game;
+/*
  * Caleb Snoozy
  * 6/4/2017
  * maze.game
@@ -24,6 +25,7 @@ public class Game {
 
     private boolean running = true;
 
+    // Requirements for text input
     private final Predicate<String> NOT_EMPTY = s -> !s.isEmpty();
     private final Predicate<String> YES_OR_NO = s ->
             s.equalsIgnoreCase("yes") ||
@@ -62,7 +64,7 @@ public class Game {
             input.setCurrentCommands("quit", "save", "reload");
             String command = input.getInput("[Quit, Save, Reload]", NOT_EMPTY).toLowerCase();
             if (command.equals("quit")) {
-                output.addToLog("Do you want to save? [Yes, No]");
+                output.addToLog("Do you want to save?");
                 input.setCurrentCommands("yes", "no");
                 command = input.getInput("yes or no", YES_OR_NO).toLowerCase();
                 if (command.equals("yes") || command.equals("y")) {
@@ -73,6 +75,8 @@ public class Game {
                 save();
             } else if (command.equals("reload")) {
 
+            } else{
+                output.addToLog("Invalid Command");
             }
         }
     }
