@@ -26,8 +26,8 @@ public class Game {
     private boolean running = true;
 
     // Requirements for text input
-    private final Predicate<String> NOT_EMPTY = s -> !s.isEmpty();
-    private final Predicate<String> YES_OR_NO = s ->
+    public static final Predicate<String> NOT_EMPTY = s -> !s.isEmpty();
+    public static final Predicate<String> YES_OR_NO = s ->
             s.equalsIgnoreCase("yes") ||
                     s.equalsIgnoreCase("y") ||
                     s.equalsIgnoreCase("no") ||
