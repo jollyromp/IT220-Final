@@ -1,35 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="91f1f1ad-5989-474f-9f34-dd759a90271b" name="Default" comment="Added gradle, getting tests ready">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/gradle.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__junit_junit_4_11.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_hamcrest_hamcrest_core_1_3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules/IT220-Final.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules/IT220-Final_main.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules/IT220-Final_test.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gradlew" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gradlew.bat" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/maze/Driver.java" afterPath="$PROJECT_DIR$/src/main/java/maze/Driver.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/maze/game/Game.java" afterPath="$PROJECT_DIR$/src/main/java/maze/game/Game.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/maze/items/Item.java" afterPath="$PROJECT_DIR$/src/main/java/maze/items/Item.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/maze/map/Maze.java" afterPath="$PROJECT_DIR$/src/main/java/maze/map/Maze.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/maze/map/MazeGenerator.java" afterPath="$PROJECT_DIR$/src/main/java/maze/map/MazeGenerator.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/maze/monsters/Monster.java" afterPath="$PROJECT_DIR$/src/main/java/maze/monsters/Monster.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/maze/monsters/MonsterLoader.java" afterPath="$PROJECT_DIR$/src/main/java/maze/monsters/MonsterLoader.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/maze/utils/TaskManager.java" afterPath="$PROJECT_DIR$/src/main/java/maze/utils/TaskManager.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/maze/view/TextInput.java" afterPath="$PROJECT_DIR$/src/main/java/maze/view/TextInput.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/maze/view/TextView.java" afterPath="$PROJECT_DIR$/src/main/java/maze/view/TextView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+    <list default="true" id="91f1f1ad-5989-474f-9f34-dd759a90271b" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Final.iml" afterPath="$PROJECT_DIR$/Final.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.travis.yml" afterPath="$PROJECT_DIR$/.travis.yml" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -78,23 +52,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Driver.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/maze/Driver.java">
+      <file leaf-file-name=".travis.yml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.travis.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="36" column="44" selection-start-line="36" selection-start-column="44" selection-end-line="36" selection-end-column="44" />
-              <folding>
-                <element signature="e#877#878#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/build.gradle">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="13" column="1" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="1" />
+            <state relative-caret-position="34">
+              <caret line="2" column="14" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
               <folding />
             </state>
           </provider>
@@ -400,6 +362,7 @@
         <option value="$PROJECT_DIR$/src/maze/game/Game.java" />
         <option value="$PROJECT_DIR$/src/maze/view/TextView.java" />
         <option value="$PROJECT_DIR$/build.gradle" />
+        <option value="$PROJECT_DIR$/.travis.yml" />
       </list>
     </option>
   </component>
@@ -822,6 +785,14 @@
       <workItem from="1496711481145" duration="3373000" />
       <workItem from="1496717279499" duration="1383000" />
     </task>
+    <task id="LOCAL-00001" summary="Added gradle, getting tests ready">
+      <created>1496805777320</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1496805777320</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -838,7 +809,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="234" y="198" width="1382" height="754" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1222,6 +1193,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/maze/Driver.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-232">
+          <caret line="36" column="44" selection-start-line="36" selection-start-column="44" selection-end-line="36" selection-end-column="44" />
+          <folding>
+            <element signature="e#877#878#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -1230,13 +1211,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/maze/Driver.java">
+    <entry file="file://$PROJECT_DIR$/.travis.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="36" column="44" selection-start-line="36" selection-start-column="44" selection-end-line="36" selection-end-column="44" />
-          <folding>
-            <element signature="e#877#878#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="34">
+          <caret line="2" column="14" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
+          <folding />
         </state>
       </provider>
     </entry>
