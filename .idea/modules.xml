@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Final.iml" filepath="$PROJECT_DIR$/Final.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/IT220-Final.iml" filepath="$PROJECT_DIR$/.idea/modules/IT220-Final.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/IT220-Final_main.iml" filepath="$PROJECT_DIR$/.idea/modules/IT220-Final_main.iml" group="IT220-Final" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/IT220-Final_test.iml" filepath="$PROJECT_DIR$/.idea/modules/IT220-Final_test.iml" group="IT220-Final" />
     </modules>
   </component>
 </project>
