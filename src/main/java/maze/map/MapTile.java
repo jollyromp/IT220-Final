@@ -12,6 +12,9 @@ import maze.entity.Entity;
 public class MapTile {
 
     private CorridorType corridor;
+    private boolean hidden = true;
+
+    // TODO(): This should be removed and the logic just stored in the map class
     private Entity member;
 
     public MapTile(CorridorType corridor, Entity member) {
@@ -21,6 +24,14 @@ public class MapTile {
 
     public CorridorType getCorridor() {
         return corridor;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
     }
 
     public Entity getMember() {

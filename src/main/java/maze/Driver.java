@@ -8,13 +8,15 @@ package maze;
  */
 
 
-import maze.map.Map;
+import maze.game.Game;
 
 public class Driver {
+
+    private static Game game;
+
     public static void main(String[] args) {
 
         // This is where we should load files and set generation settings
-        Map gameMap = new Map(10, 10);
-        System.out.println(gameMap);
+        game = new Game();
     }
 }
