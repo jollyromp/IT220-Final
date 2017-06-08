@@ -9,68 +9,141 @@ package maze.map;
 
 public enum CorridorType {
     INTERSECTION(
-            "_| |_",
-            "_   _",
-            " | | "
+            "▓░▓",
+            "░░░",
+            "▓░▓"
     ),
     DOWN_RIGHT(
-            "  ___",
-            " |  _",
-            " | | "
+            "▓▓▓",
+            "▓░░",
+            "▓░▓"
     ),
     UP_LEFT(
-            "_| | ",
-            "___| ",
-            "     "
+            "▓░▓",
+            "░░▓",
+            "▓▓▓"
     ),
     UP_RIGHT(
-            " | |_",
-            " |___",
-            "     "
+            "▓░▓",
+            "▓░░",
+            "▓▓▓"
     ),
     DOWN_LEFT(
-            "___  ",
-            "_  | ",
-            " | | "
+            "▓▓▓",
+            "░░▓",
+            "▓░▓"
     ),
     VERTICAL_PIPE(
-            " | | ",
-            " | | ",
-            " | | "
+            "▓░▓",
+            "▓░▓",
+            "▓░▓"
     ),
     HORIZONTAL_PIPE(
-            "_____",
-            "_____",
-            "     "
+            "▓▓▓",
+            "░░░",
+            "▓▓▓"
     ),
     UP_DOWN_LEFT(
-            "_| | ",
-            "_  | ",
-            " | | "
+            "▓░▓",
+            "░░▓",
+            "▓░▓"
     ),
     UP_DOWN_RIGHT(
-            " | |_",
-            " |  _",
-            " | | "
+            "▓░▓",
+            "▓░░",
+            "▓░▓"
     ),
     UP_LEFT_RIGHT(
-            "_| |_",
-            "_____",
-            "     "
+            "▓░▓",
+            "░░░",
+            "▓▓▓"
     ),
     DOWN_LEFT_RIGHT(
-            "_____",
-            "_   _",
-            " | | "
+            "▓▓▓",
+            "░░░",
+            "▓░▓"
     );
 
-    private String[] corridor;
+//    INTERSECTION(
+//            "_| |_",
+//            "_   _",
+//            " | | "
+//    ),
+//    DOWN_RIGHT(
+//            "  ___",
+//            " |  _",
+//            " | | "
+//    ),
+//    UP_LEFT(
+//            "_| | ",
+//            "___| ",
+//            "     "
+//    ),
+//    UP_RIGHT(
+//            " | |_",
+//            " |___",
+//            "     "
+//    ),
+//    DOWN_LEFT(
+//            "___  ",
+//            "_  | ",
+//            " | | "
+//    ),
+//    VERTICAL_PIPE(
+//            " | | ",
+//            " | | ",
+//            " | | "
+//    ),
+//    HORIZONTAL_PIPE(
+//            "_____",
+//            "_____",
+//            "     "
+//    ),
+//    UP_DOWN_LEFT(
+//            "_| | ",
+//            "_  | ",
+//            " | | "
+//    ),
+//    UP_DOWN_RIGHT(
+//            " | |_",
+//            " |  _",
+//            " | | "
+//    ),
+//    UP_LEFT_RIGHT(
+//            "_| |_",
+//            "_____",
+//            "     "
+//    ),
+//    DOWN_LEFT_RIGHT(
+//            "_____",
+//            "_   _",
+//            " | | "
+//    );
 
-    CorridorType(String... corridor) {
-        this.corridor = corridor;
+    private int tileWidth = 3;
+    private int tileHeight = 3;
+    // Used to replace tiles center with the entity icon, should be half of the height + floored
+    private int tileVerticalMid = Math.floorDiv(3, 2);
+
+    private String[] layout;
+
+    CorridorType(String... layout) {
+        this.layout = layout;
     }
 
-    public String[] getCorridor(){
-        return corridor;
+    public String[] getLayout(){
+        return layout;
+    }
+
+    public int getTileWidth() {
+        return tileWidth;
+    }
+
+    public int getTileHeight() {
+        return tileHeight;
+    }
+
+    public int getTileVerticalMid(){
+        return tileVerticalMid;
     }
 }

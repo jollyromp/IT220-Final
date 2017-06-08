@@ -26,4 +26,8 @@ public class MapTile {
     public Entity getMember() {
         return member;
     }
+
+    public void setMember(Entity entity){
+        this.member = entity;
+    }
 }
