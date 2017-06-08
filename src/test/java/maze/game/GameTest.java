@@ -1,9 +1,10 @@
-package maze.game;/*
- * Caleb Snoozy
+package maze.game;
+/*
+ * Caleb Snoozy, Jacob Tran
  * 6/6/2017
  * maze.game
  * GameTest.java
- * IT220-Final - description
+ * IT220-Final - Unit test the Game class
  */
 
 import org.junit.Assert;
