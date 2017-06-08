@@ -7,8 +7,6 @@ package maze.game;
  * Final - description
  */
 
-import maze.monsters.Monster;
-import maze.monsters.MonsterLoader;
 import maze.view.TextInput;
 import maze.view.TextView;
 
@@ -21,7 +19,6 @@ public class Game {
     private TextView output;
 
     private final String MONSTERS_PATH = "";
-    private List<Monster> monsters;
 
     private boolean running = true;
 
@@ -46,7 +43,6 @@ public class Game {
     private void init() {
         output.setLocation("Loading...");
         // Load Monsters
-        monsters = MonsterLoader.load(new File(MONSTERS_PATH));
         // Load Items
         // Load Tiles
 

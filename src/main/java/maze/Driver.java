@@ -17,6 +17,9 @@ import maze.utils.TaskManager;
 import maze.view.TextInput;
 import maze.view.TextView;
 
+import java.io.File;
+import java.util.Arrays;
+
 public class Driver extends Application {
 
     // Constants
@@ -48,7 +51,7 @@ public class Driver extends Application {
         root.setBottom(input);
 
         Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT, Color.BLACK);
-        scene.getStylesheets().add("styles.css");
+        scene.getStylesheets().add("styles.css");//Driver.class.getResource("/styles.css").getFile());
 
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
