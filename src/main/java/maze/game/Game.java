@@ -11,6 +11,7 @@ import maze.entity.Player;
 import maze.io.ConsoleIO;
 import maze.map.Map;
 
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
 public class Game {
@@ -19,6 +20,8 @@ public class Game {
 
     private Player player;
     private Map currentMap;
+
+    private final ThreadLocalRandom random = ThreadLocalRandom.current();
 
     // Requirements for text input
     public static final Predicate<String> NOT_EMPTY = s -> !s.isEmpty();
@@ -38,7 +41,7 @@ public class Game {
 
     private void init() {
         player = new Player(ConsoleIO.nextLine("Please enter your name"), "\uD83D\uDF9C");
-        currentMap = new Map(10, 10);
+        currentMap = new Map(random.nextInt(5, 15), random.nextInt(5, 15));
         currentMap.setPlayer(player);
     }
 
@@ -63,20 +66,28 @@ public class Game {
                         ConsoleIO.waitForEnter();
                         break;
                     case "move down":
-                        currentMap.movePlayer(0, 1);
-                        doTimelyAction = false;
+                        if (currentMap.movePlayer(0, 1))
+                            doTimelyAction = false;
+                        else
+                            ConsoleIO.println("You can't go that way");
                         break;
                     case "move up":
-                        currentMap.movePlayer(0, -1);
-                        doTimelyAction = false;
+                        if (currentMap.movePlayer(0, -1))
+                            doTimelyAction = false;
+                        else
+                            ConsoleIO.println("You can't go that way");
                         break;
                     case "move left":
-                        currentMap.movePlayer(-1, 0);
-                        doTimelyAction = false;
+                        if (currentMap.movePlayer(-1, 0))
+                            doTimelyAction = false;
+                        else
+                            ConsoleIO.println("You can't go that way");
                         break;
                     case "move right":
-                        currentMap.movePlayer(1, 0);
-                        doTimelyAction = false;
+                        if (currentMap.movePlayer(1, 0))
+                            doTimelyAction = false;
+                        else
+                            ConsoleIO.println("You can't go that way");
                         break;
                     default:
                         ConsoleIO.println("Please enter a valid command");
@@ -85,6 +96,13 @@ public class Game {
                     running = false;
                     break;
                 }
+                // Player checks
+                if (currentMap.isOnExit()) {
+                    ConsoleIO.println("Floor complete!");
+                    currentMap = new Map(random.nextInt(5, 15), random.nextInt(5, 15));
+                    currentMap.setPlayer(player);
+                }
+
                 // Enemy actions
             }
         }

@@ -123,7 +123,8 @@ public enum CorridorType {
     private int tileWidth = 3;
     private int tileHeight = 3;
     // Used to replace tiles center with the entity icon, should be half of the height + floored
-    private int tileVerticalMid = Math.floorDiv(3, 2);
+    private int tileVerticalMid = Math.floorDiv(tileHeight, 2);
+    private int tileHorizontalMid = Math.floorDiv(tileWidth, 2);
 
     private String[] layout;
 
@@ -131,7 +132,7 @@ public enum CorridorType {
         this.layout = layout;
     }
 
-    public String[] getLayout(){
+    public String[] getLayout() {
         return layout;
     }
 
@@ -143,7 +144,11 @@ public enum CorridorType {
         return tileHeight;
     }
 
-    public int getTileVerticalMid(){
+    public int getTileVerticalMid() {
         return tileVerticalMid;
+    }
+
+    public int getTileHorizontalMid() {
+        return tileHorizontalMid;
     }
 }

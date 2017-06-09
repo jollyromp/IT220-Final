@@ -60,6 +60,16 @@ public class ConsoleIO {
     }
 
     /**
+     * Prints each variable object as a new phrase on the same line.
+     * No extra formatting.
+     */
+    public static void print(Object... args) {
+        for (Object phrase : args) {
+            System.out.print(phrase);
+        }
+    }
+
+    /**
      * Get a string from the user console with no prompt.
      */
     public static String nextLine() {
