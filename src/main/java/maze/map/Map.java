@@ -24,17 +24,13 @@ import java.util.Random;
  */
 public class Map {
 
-    private final String HIDDEN_TILE = "▒";
-    private boolean[][] north, east, south, west, visited;
+    private final char HIDDEN_TILE = '▒';
 
-    private int width, height;
-    // First square is height, second is width
+    private boolean[][] north, east, south, west, visited;
+    private int width, height, playerX, playerY, longestPath, exitX, exitY;
     private Tile[][] map;
     private Random random = new Random();
     private Player player;
-    private int playerX, playerY;
-
-    private int longestPath, exitX, exitY;
 
     public Map(int width, int height) {
         this.width = width;
@@ -54,25 +50,25 @@ public class Map {
 
     public String miniMap() {
         StringBuilder drawnMap = new StringBuilder();
-        // For each row of tile
+        // For each row of tile around the player
         for (int h = playerY == 0 ? 0 : playerY - 1; h < (playerY == height - 1 ? height : playerY + 2); h++) {
             // for each row of the tile
-            for (int row = 0; row < Tile.getTileHeight(); row++) {
+            for (int row = 0; row < Tile.miniHeight; row++) {
                 // for each column of the current row
                 for (int w = playerX == 0 ? 0 : playerX - 1; w < (playerX == width - 1 ? width : playerX + 2); w++) {
                     // get the current tile
                     Tile tile = map[h][w];
                     // get the current layout
-                    String layout = tile.getLayout()[row];
+                    String layout = tile.getMiniLayout()[row];
                     // If it's the center row and the tile has an entity on it, replace the center with the entity icon
                     if (tile.isHidden()) {
-                        for (int i = 0; i < Tile.getTileWidth(); i++) {
+                        for (int i = 0; i < Tile.miniWidth; i++) {
                             drawnMap.append(HIDDEN_TILE);
                         }
-                    } else if (row == Tile.getTileVerticalMid() && tile.getMember() != null) {
-                        drawnMap.append(layout.substring(0, Tile.getTileHorizontalMid()))
+                    } else if (row == Tile.miniVerticalMid && tile.getMember() != null) {
+                        drawnMap.append(layout.substring(0, Tile.miniHorizontalMid))
                                 .append(tile.getMember().getIcon())
-                                .append(layout.substring(Tile.getTileHorizontalMid() + 1));
+                                .append(layout.substring(Tile.miniHorizontalMid + 1));
                     } else { // draw the layout normally
                         drawnMap.append(layout);
                     }
@@ -83,29 +79,21 @@ public class Map {
         return drawnMap.toString();
     }
 
-    public boolean movePlayer(int x, int y) {
+    public boolean movePlayer(Player.Move move) {
         boolean didMove = false;
         map[playerY][playerX].setMember(null);
-        if (y == 1) { // Move down
-            if (map[playerY][playerX].canMoveDown()) {
-                playerY++;
-                didMove = true;
-            }
-        } else if (y == -1) { // Move up
-            if (map[playerY][playerX].canMoveUp()) {
-                playerY--;
-                didMove = true;
-            }
-        } else if (x == 1) { // Move right
-            if (map[playerY][playerX].canMoveRight()) {
-                playerX++;
-                didMove = true;
-            }
-        } else if (x == -1) { // Move left
-            if (map[playerY][playerX].canMoveLeft()) {
-                playerX--;
-                didMove = true;
-            }
+        if (move.equals(Player.Move.DOWN) && map[playerY][playerX].canMoveDown()) { // Move down
+            playerY++;
+            didMove = true;
+        } else if (move.equals(Player.Move.UP) && map[playerY][playerX].canMoveUp()) { // Move up
+            playerY--;
+            didMove = true;
+        } else if (move.equals(Player.Move.RIGHT) && map[playerY][playerX].canMoveRight()) { // Move right
+            playerX++;
+            didMove = true;
+        } else if (move.equals(Player.Move.LEFT) && map[playerY][playerX].canMoveLeft()) { // Move left
+            playerX--;
+            didMove = true;
         }
 
         map[playerY][playerX].setMember(player);
@@ -115,14 +103,14 @@ public class Map {
     }
 
     /**
-     * Draw the exposed map
+     * Draw the full map
      */
-    public String toString() {
+    public String map(boolean drawHidden) {
         StringBuilder drawnMap = new StringBuilder();
         // For each row of tile
         for (int h = 0; h < height; h++) {
             // for each row of the tile
-            for (int row = 0; row < Tile.getTileHeight(); row++) {
+            for (int row = 0; row < Tile.tileHeight; row++) {
                 // for each column of the current row
                 for (int w = 0; w < width; w++) {
                     // get the current tile
@@ -130,14 +118,14 @@ public class Map {
                     // get the current layout
                     String layout = tile.getLayout()[row];
                     // If it's the center row and the tile has an entity on it, replace the center with the entity icon
-                    if (false && tile.isHidden()) { //TODO(): Remove false after testing!!!
-                        for (int i = 0; i < Tile.getTileWidth(); i++) {
+                    if (drawHidden && tile.isHidden()) {
+                        for (int i = 0; i < Tile.tileWidth; i++) {
                             drawnMap.append(HIDDEN_TILE);
                         }
-                    } else if (row == Tile.getTileVerticalMid() && tile.getMember() != null) {
-                        drawnMap.append(layout.substring(0, Tile.getTileHorizontalMid()))
+                    } else if (row == Tile.tileVerticalMid && tile.getMember() != null) {
+                        drawnMap.append(layout.substring(0, Tile.tileHorizontalMid))
                                 .append(tile.getMember().getIcon())
-                                .append(layout.substring(Tile.getTileHorizontalMid() + 1));
+                                .append(layout.substring(Tile.tileHorizontalMid + 1));
                     } else { // draw the layout normally
                         drawnMap.append(layout);
                     }
@@ -148,7 +136,7 @@ public class Map {
         return drawnMap.toString();
     }
 
-    public boolean isOnExit(){
+    public boolean isOnExit() {
         return playerX == exitX && playerY == exitY;
     }
 
@@ -185,7 +173,7 @@ public class Map {
         // starts at 1, 1, and ends 1 early due to padding in the generation
         for (int h = 1; h <= height; h++) {
             for (int w = 1; w <= width; w++) {
-                map[h - 1][w - 1] = new Tile(new Tile.Corridor(!north[h][w], !south[h][w], !west[h][w], !east[h][w]));
+                map[h - 1][w - 1] = new Tile(!north[h][w], !south[h][w], !west[h][w], !east[h][w]);
             }
         }
 
@@ -195,29 +183,29 @@ public class Map {
 
     private void generate(int x, int y, int lengthFromStart) {
         visited[y][x] = true;
-        if (lengthFromStart > longestPath){
+        if (lengthFromStart > longestPath) {
             longestPath = lengthFromStart;
-            exitX = x-1;
-            exitY = y-1;
+            exitX = x - 1;
+            exitY = y - 1;
         }
         while (!visited[y][x + 1] || !visited[y + 1][x] || !visited[y][x - 1] || !visited[y - 1][x])
             while (true) {
                 int r = random.nextInt(4);
                 if (r == 0 && !visited[y - 1][x]) {
                     north[y][x] = south[y - 1][x] = false;
-                    generate(x, y - 1, lengthFromStart+1);
+                    generate(x, y - 1, lengthFromStart + 1);
                     break;
                 } else if (r == 1 && !visited[y][x + 1]) {
                     east[y][x] = west[y][x + 1] = false;
-                    generate(x + 1, y, lengthFromStart+1);
+                    generate(x + 1, y, lengthFromStart + 1);
                     break;
                 } else if (r == 2 && !visited[y + 1][x]) {
                     south[y][x] = north[y + 1][x] = false;
-                    generate(x, y + 1, lengthFromStart+1);
+                    generate(x, y + 1, lengthFromStart + 1);
                     break;
                 } else if (r == 3 && !visited[y][x - 1]) {
                     west[y][x] = east[y][x - 1] = false;
-                    generate(x - 1, y, lengthFromStart+1);
+                    generate(x - 1, y, lengthFromStart + 1);
                     break;
                 }
             }

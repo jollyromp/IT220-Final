@@ -41,7 +41,7 @@ public class ConsoleIO {
     }
 
     /**
-     * prints each variable object.toString as a new line.
+     * prints each variable object.map as a new line.
      */
     public static void println(Object... args) {
         for (Object object : args) {

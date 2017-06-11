@@ -10,6 +10,8 @@ import maze.entity.abilities.Ability;
  */
 public class Player extends Living implements Combat {
 
+    public static final String ICON = "\uD83D\uDF9C";
+
     public Player(String name, String icon) {
         super(name, icon);
 
@@ -24,5 +26,9 @@ public class Player extends Living implements Combat {
     @Override
     public void useAbility(Living target, Ability ability) {
         ability.use(target);
+    }
+
+    public enum Move{
+        UP, DOWN, LEFT, RIGHT
     }
 }

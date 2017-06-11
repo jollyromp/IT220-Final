@@ -4,7 +4,7 @@ package maze.game;
  * 6/4/2017
  * maze.game
  * Game.java
- * Final - description
+ * Final - The game class, runs the loop and manages state
  */
 
 import maze.entity.Player;
@@ -12,9 +12,10 @@ import maze.io.ConsoleIO;
 import maze.map.Map;
 
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Predicate;
 
 public class Game {
+    private static final int MIN_MAP_SIZE = 5;
+    private static final int MAX_MAP_SIZE = 10;
     private boolean running = true;
     private boolean quit = false;
 
@@ -22,15 +23,6 @@ public class Game {
     private Map currentMap;
 
     private final ThreadLocalRandom random = ThreadLocalRandom.current();
-
-    // Requirements for text input
-    public static final Predicate<String> NOT_EMPTY = s -> !s.isEmpty();
-    public static final Predicate<String> YES_OR_NO = s ->
-            s.equalsIgnoreCase("yes") ||
-                    s.equalsIgnoreCase("y") ||
-                    s.equalsIgnoreCase("no") ||
-                    s.equalsIgnoreCase("n");
-
 
     public Game() {
         init();
@@ -40,8 +32,8 @@ public class Game {
     }
 
     private void init() {
-        player = new Player(ConsoleIO.nextLine("Please enter your name"), "\uD83D\uDF9C");
-        currentMap = new Map(random.nextInt(5, 15), random.nextInt(5, 15));
+        player = new Player(ConsoleIO.nextLine("What is your hero's name", ConsoleIO.NOT_EMPTY, s -> s), Player.ICON);
+        currentMap = new Map(random.nextInt(MIN_MAP_SIZE, MAX_MAP_SIZE), random.nextInt(MIN_MAP_SIZE, MAX_MAP_SIZE));
         currentMap.setPlayer(player);
     }
 
@@ -61,30 +53,34 @@ public class Game {
                     case "save": // Save the current game state
                         save();
                         break;
-                    case "show map": // Draw full explored map
-                        ConsoleIO.println(currentMap);
+                    case "map": // Draw explored map
+                        ConsoleIO.println(currentMap.map(true));
                         ConsoleIO.waitForEnter();
                         break;
-                    case "move down":
-                        if (currentMap.movePlayer(0, 1))
+                    case "debug map": // Draw full map
+                        ConsoleIO.println(currentMap.map(false));
+                        ConsoleIO.waitForEnter();
+                        break;
+                    case "down":
+                        if (currentMap.movePlayer(Player.Move.DOWN))
                             doTimelyAction = false;
                         else
                             ConsoleIO.println("You can't go that way");
                         break;
-                    case "move up":
-                        if (currentMap.movePlayer(0, -1))
+                    case "up":
+                        if (currentMap.movePlayer(Player.Move.UP))
                             doTimelyAction = false;
                         else
                             ConsoleIO.println("You can't go that way");
                         break;
-                    case "move left":
-                        if (currentMap.movePlayer(-1, 0))
+                    case "left":
+                        if (currentMap.movePlayer(Player.Move.LEFT))
                             doTimelyAction = false;
                         else
                             ConsoleIO.println("You can't go that way");
                         break;
-                    case "move right":
-                        if (currentMap.movePlayer(1, 0))
+                    case "right":
+                        if (currentMap.movePlayer(Player.Move.RIGHT))
                             doTimelyAction = false;
                         else
                             ConsoleIO.println("You can't go that way");
@@ -96,14 +92,19 @@ public class Game {
                     running = false;
                     break;
                 }
-                // Player checks
-                if (currentMap.isOnExit()) {
-                    ConsoleIO.println("Floor complete!");
-                    currentMap = new Map(random.nextInt(5, 15), random.nextInt(5, 15));
-                    currentMap.setPlayer(player);
-                }
+            }
+            // Player checks
+            if (currentMap.isOnExit()) {
+                ConsoleIO.println(currentMap.miniMap(), "Floor complete!");
+                currentMap = new Map(random.nextInt(MIN_MAP_SIZE, MAX_MAP_SIZE), random.nextInt(MIN_MAP_SIZE, MAX_MAP_SIZE));
+                currentMap.setPlayer(player);
+            }
 
-                // Enemy actions
+            // Enemy actions
+
+            if (random.nextInt(100) > 75){
+                // random event
+                ConsoleIO.println("===== Event =====", player.getName() + " trips on a spike.", "=================");
             }
         }
     }
