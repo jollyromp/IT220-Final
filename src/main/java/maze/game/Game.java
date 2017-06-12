@@ -7,10 +7,13 @@ package maze.game;
  * Final - The game class, runs the loop and manages state
  */
 
+import maze.entity.Enemy;
+import maze.entity.Living;
 import maze.entity.Player;
 import maze.io.ConsoleIO;
 import maze.map.Map;
 
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Game {
@@ -18,8 +21,10 @@ public class Game {
     private static final int MAX_MAP_SIZE = 10;
     private boolean running = true;
     private boolean quit = false;
+    private int depth = 1;
 
     private Player player;
+    private List<Enemy> enemies;
     private Map currentMap;
 
     private final ThreadLocalRandom random = ThreadLocalRandom.current();
@@ -33,8 +38,9 @@ public class Game {
 
     private void init() {
         player = new Player(ConsoleIO.nextLine("What is your hero's name", ConsoleIO.NOT_EMPTY, s -> s), Player.ICON);
-        currentMap = new Map(random.nextInt(MIN_MAP_SIZE, MAX_MAP_SIZE), random.nextInt(MIN_MAP_SIZE, MAX_MAP_SIZE));
+        currentMap = new Map(random.nextInt(MIN_MAP_SIZE, MAX_MAP_SIZE), random.nextInt(MIN_MAP_SIZE, MAX_MAP_SIZE), depth);
         currentMap.setPlayer(player);
+        enemies = currentMap.createMonsters();
     }
 
     /**
@@ -62,28 +68,19 @@ public class Game {
                         ConsoleIO.waitForEnter();
                         break;
                     case "down":
-                        if (currentMap.movePlayer(Player.Move.DOWN))
-                            doTimelyAction = false;
-                        else
-                            ConsoleIO.println("You can't go that way");
+                        doTimelyAction = action(currentMap.movePlayer(Player.Move.DOWN));
                         break;
                     case "up":
-                        if (currentMap.movePlayer(Player.Move.UP))
-                            doTimelyAction = false;
-                        else
-                            ConsoleIO.println("You can't go that way");
+                        doTimelyAction = action(currentMap.movePlayer(Player.Move.UP));
                         break;
                     case "left":
-                        if (currentMap.movePlayer(Player.Move.LEFT))
-                            doTimelyAction = false;
-                        else
-                            ConsoleIO.println("You can't go that way");
+                        doTimelyAction = action(currentMap.movePlayer(Player.Move.LEFT)) ;
                         break;
                     case "right":
-                        if (currentMap.movePlayer(Player.Move.RIGHT))
-                            doTimelyAction = false;
-                        else
-                            ConsoleIO.println("You can't go that way");
+                        doTimelyAction = action(currentMap.movePlayer(Player.Move.RIGHT));
+                        break;
+                    case "help":
+                        showHelp();
                         break;
                     default:
                         ConsoleIO.println("Please enter a valid command");
@@ -96,17 +93,49 @@ public class Game {
             // Player checks
             if (currentMap.isOnExit()) {
                 ConsoleIO.println(currentMap.miniMap(), "Floor complete!");
-                currentMap = new Map(random.nextInt(MIN_MAP_SIZE, MAX_MAP_SIZE), random.nextInt(MIN_MAP_SIZE, MAX_MAP_SIZE));
+                currentMap = new Map(random.nextInt(MIN_MAP_SIZE, MAX_MAP_SIZE), random.nextInt(MIN_MAP_SIZE, MAX_MAP_SIZE), ++depth);
                 currentMap.setPlayer(player);
+                enemies = currentMap.createMonsters();
             }
 
             // Enemy actions
+            enemies.forEach(enemy -> currentMap.moveEnemy(enemy, Enemy.Move.values()[random.nextInt(Enemy.Move.values().length)]));
 
-            if (random.nextInt(100) > 75){
-                // random event
-                ConsoleIO.println("===== Event =====", player.getName() + " trips on a spike.", "=================");
-            }
+//            if (random.nextInt(100) > 75) {
+//                // random event
+//                ConsoleIO.println("===== Event =====", player.getName() + " trips on a spike.", "=================");
+//            }
         }
+    }
+
+    private boolean action(Living.MoveResult result){
+        switch (result) {
+            case WALL:
+                ConsoleIO.println("You can't go that way.");
+                break;
+            case ENEMY:
+                ConsoleIO.println("There is an enemy in the way.");
+                break;
+            case SUCCESS:
+                return false;
+        }
+        return true;
+    }
+
+    private void showHelp() {
+        ConsoleIO.println(
+                "===== ===== ===== Help ===== ===== =====",
+                "Commands:",
+                ">>> Movement <<<",
+                "up - to move up if possible",
+                "down - to move down if possible",
+                "left - to move left if possible",
+                "right - to move right if possible",
+                ">>> System <<<",
+                "quit - save and quits the game",
+                "save - saves the game",
+                "map - shows the full map, that has been explored",
+                "");
     }
 
     /**

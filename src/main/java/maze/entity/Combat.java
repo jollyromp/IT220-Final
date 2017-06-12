@@ -9,8 +9,8 @@ import maze.entity.abilities.Ability;
  * description
  */
 public interface Combat {
-    void basicAttack(Living target);
+    boolean basicAttack(Living target);
 
-    void useAbility(Living target, Ability ability);
+    boolean useAbility(Living target, Ability ability);
 
 }

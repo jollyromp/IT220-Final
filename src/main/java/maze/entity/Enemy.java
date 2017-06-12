@@ -2,6 +2,8 @@ package maze.entity;
 
 import maze.entity.abilities.Ability;
 
+import java.util.Random;
+
 /*
  * Name: Caleb Snoozy
  * Date: 6/7/2017
@@ -10,17 +12,25 @@ import maze.entity.abilities.Ability;
  */
 public class Enemy extends Living implements Combat {
 
-    public Enemy(String name, String icon) {
-        super(name, icon);
+    private static Random random = new Random();
+    private static String[] icons = {"\uD83D\uDFA7", "\uD83D\uDFAE", "\uD83D\uDFB4", "\uD83D\uDFBA", "\uD83D\uDFBF"};
+
+    public Enemy(String name, String icon, int level, int health, int damage) {
+        super(name, icon, level, health, damage);
     }
 
     @Override
-    public void basicAttack(Living target) {
-
+    public boolean basicAttack(Living target) {
+        return target.takeDamage(getDamage());
     }
 
     @Override
-    public void useAbility(Living target, Ability ability) {
+    public boolean useAbility(Living target, Ability ability) {
         ability.use(target);
+        return true;
+    }
+
+    public static String getRandomIcon() {
+        return icons[random.nextInt(icons.length)];
     }
 }

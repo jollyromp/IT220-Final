@@ -123,6 +123,10 @@ public class Tile {
         this.member = entity;
     }
 
+    public boolean hasMember(){
+        return member != null;
+    }
+
     /**
      * @return can the player move up
      */

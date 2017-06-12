@@ -7,10 +7,14 @@ package maze.map;
  * IT220-Final - description
  */
 
+import maze.entity.Enemy;
 import maze.entity.Exit;
+import maze.entity.Living;
 import maze.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -27,35 +31,36 @@ public class Map {
     private final char HIDDEN_TILE = '▒';
 
     private boolean[][] north, east, south, west, visited;
-    private int width, height, playerX, playerY, longestPath, exitX, exitY;
+    private int width, height, depth, longestPath, exitX, exitY;
     private Tile[][] map;
     private Random random = new Random();
     private Player player;
 
-    public Map(int width, int height) {
+    public Map(int width, int height, int depth) {
         this.width = width;
         this.height = height;
+        this.depth = depth;
 
         map = new Tile[height][width];
         generateTiles();
-        playerX = 0;
-        playerY = 0;
-        map[playerY][playerX].setHidden(false);
+        map[0][0].setHidden(false);
     }
 
     public void setPlayer(Player player) {
         this.player = player;
-        map[playerY][playerX].setMember(player);
+        this.player.setX(0);
+        this.player.setY(0);
+        map[0][0].setMember(player);
     }
 
     public String miniMap() {
         StringBuilder drawnMap = new StringBuilder();
         // For each row of tile around the player
-        for (int h = playerY == 0 ? 0 : playerY - 1; h < (playerY == height - 1 ? height : playerY + 2); h++) {
+        for (int h = player.getY() == 0 ? 0 : player.getY() - 1; h < (player.getY() == height - 1 ? height : player.getY() + 2); h++) {
             // for each row of the tile
             for (int row = 0; row < Tile.miniHeight; row++) {
                 // for each column of the current row
-                for (int w = playerX == 0 ? 0 : playerX - 1; w < (playerX == width - 1 ? width : playerX + 2); w++) {
+                for (int w = player.getX() == 0 ? 0 : player.getX() - 1; w < (player.getX() == width - 1 ? width : player.getX() + 2); w++) {
                     // get the current tile
                     Tile tile = map[h][w];
                     // get the current layout
@@ -79,27 +84,65 @@ public class Map {
         return drawnMap.toString();
     }
 
-    public boolean movePlayer(Player.Move move) {
-        boolean didMove = false;
-        map[playerY][playerX].setMember(null);
-        if (move.equals(Player.Move.DOWN) && map[playerY][playerX].canMoveDown()) { // Move down
-            playerY++;
-            didMove = true;
-        } else if (move.equals(Player.Move.UP) && map[playerY][playerX].canMoveUp()) { // Move up
-            playerY--;
-            didMove = true;
-        } else if (move.equals(Player.Move.RIGHT) && map[playerY][playerX].canMoveRight()) { // Move right
-            playerX++;
-            didMove = true;
-        } else if (move.equals(Player.Move.LEFT) && map[playerY][playerX].canMoveLeft()) { // Move left
-            playerX--;
-            didMove = true;
+    public Living.MoveResult movePlayer(Player.Move move) {
+        Living.MoveResult result = Living.MoveResult.WALL;
+        map[player.getY()][player.getX()].setMember(null);
+        if (move.equals(Player.Move.DOWN) && map[player.getY()][player.getX()].canMoveDown()) { // Move down
+            if (map[player.getY() + 1][player.getX()].hasMember())
+                result = Living.MoveResult.ENEMY;
+            else {
+                player.setY(player.getY() + 1);
+                result = Living.MoveResult.SUCCESS;
+            }
+        } else if (move.equals(Player.Move.UP) && map[player.getY()][player.getX()].canMoveUp()) { // Move up
+            if (map[player.getY() - 1][player.getX()].hasMember())
+                result = Living.MoveResult.ENEMY;
+            else {
+                player.setY(player.getY() - 1);
+                result = Living.MoveResult.SUCCESS;
+            }
+        } else if (move.equals(Player.Move.RIGHT) && map[player.getY()][player.getX()].canMoveRight()) { // Move right
+            if (map[player.getY()][player.getX() + 1].hasMember())
+                result = Living.MoveResult.ENEMY;
+            else {
+                player.setX(player.getX() + 1);
+                result = Living.MoveResult.SUCCESS;
+            }
+        } else if (move.equals(Player.Move.LEFT) && map[player.getY()][player.getX()].canMoveLeft()) { // Move left
+            if (map[player.getY()][player.getX() - 1].hasMember())
+                result = Living.MoveResult.ENEMY;
+            else {
+                player.setX(player.getX() - 1);
+                result = Living.MoveResult.SUCCESS;
+            }
         }
 
-        map[playerY][playerX].setMember(player);
-        map[playerY][playerX].setHidden(false);
+        map[player.getY()][player.getX()].setMember(player);
+        map[player.getY()][player.getX()].setHidden(false);
 
-        return didMove;
+        return result;
+    }
+
+    public Living.MoveResult moveEnemy(Enemy enemy, Enemy.Move move) {
+        Living.MoveResult result = Living.MoveResult.WALL;
+        map[enemy.getY()][enemy.getX()].setMember(null);
+        if (move.equals(Enemy.Move.DOWN) && map[enemy.getY()][enemy.getX()].canMoveDown() && !map[enemy.getY() + 1][enemy.getX()].hasMember()) { // Move down
+            enemy.setY(enemy.getY() + 1);
+            result = Living.MoveResult.SUCCESS;
+        } else if (move.equals(Enemy.Move.UP) && map[enemy.getY()][enemy.getX()].canMoveUp() && !map[enemy.getY() - 1][enemy.getX()].hasMember()) { // Move up
+            enemy.setY(enemy.getY() - 1);
+            result = Living.MoveResult.SUCCESS;
+        } else if (move.equals(Enemy.Move.RIGHT) && map[enemy.getY()][enemy.getX()].canMoveRight() && !map[enemy.getY()][enemy.getX() + 1].hasMember()) { // Move right
+            enemy.setX(enemy.getX() + 1);
+            result = Living.MoveResult.SUCCESS;
+        } else if (move.equals(Enemy.Move.LEFT) && map[enemy.getY()][enemy.getX()].canMoveLeft() && !map[enemy.getY()][enemy.getX() - 1].hasMember()) { // Move left
+            enemy.setX(enemy.getX() - 1);
+            result = Living.MoveResult.SUCCESS;
+        }
+
+        map[enemy.getY()][enemy.getX()].setMember(enemy);
+
+        return result;
     }
 
     /**
@@ -137,7 +180,24 @@ public class Map {
     }
 
     public boolean isOnExit() {
-        return playerX == exitX && playerY == exitY;
+        return player.getX() == exitX && player.getY() == exitY;
+    }
+
+    public List<Enemy> createMonsters() {
+        List<Enemy> enemies = new ArrayList<>();
+        for (int h = 0; h < height; h++) {
+            for (int w = 0; w < width; w++) {
+                if ((h > 1 && w > 1) && random.nextInt(100) > 65 && (h != exitY && w != exitX)) {
+                    Enemy enemy = new Enemy("NEEDS A NAME", Enemy.getRandomIcon(), depth, 10 * depth, 2 * depth);
+                    enemy.setX(w);
+                    enemy.setY(h);
+                    enemies.add(enemy);
+                    map[h][w].setMember(enemy);
+                }
+            }
+        }
+
+        return enemies;
     }
 
     /**
