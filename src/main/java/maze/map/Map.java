@@ -9,10 +9,7 @@ package maze.map;
 
 import maze.Driver;
 import maze.combat.CombatEvent;
-import maze.entity.Enemy;
-import maze.entity.Exit;
-import maze.entity.Living;
-import maze.entity.Player;
+import maze.entity.*;
 import maze.entity.abilities.Ability;
 import maze.io.ConsoleIO;
 
@@ -33,7 +30,10 @@ public class Map {
     public static final int ENEMY_ABILITY_LIMIT = 6;
     public static final int ENEMY_HEALTH_LIMIT = 10;
     public static final int ENEMY_DAMAGE_LIMIT = 4;
-    
+    public static final int ITEM_AMOUNT = 6;
+    public static final String RUNE_NAME = "Rune";
+    public static final String RUNE_DESCTIPTION = "This small stone contains an ability";
+
     private final char HIDDEN_TILE = '▒';
 
     private boolean[][] north, east, south, west, visited;
@@ -57,6 +57,14 @@ public class Map {
 
         map = new Tile[height][width];
         generateTiles();
+
+        for (int i = 0; i < ITEM_AMOUNT; i++) {
+            int randX = random.nextInt(width);
+            int randY = random.nextInt(height);
+            if (map[randY][randX].getMember() == null) {
+                map[randY][randX].setMember(new Item(RUNE_NAME, RUNE_DESCTIPTION));
+            }
+        }
 
         try {
             Scanner scanner = new Scanner(new File(Driver.class.getResource("/abilities.txt").getFile()));
@@ -150,12 +158,32 @@ public class Map {
                     result = Living.MoveResult.LOSE;
                 }
             }
+            if(map[y][x].getMember() instanceof Item) {
+                pickupItem((Item)map[y][x].getMember());
+                player.levelUp();
+                map[y][x].setMember(null);
+                player.setX(x);
+                player.setY(y);
+                result = Living.MoveResult.SUCCESS;
+            }
         else {
             player.setX(x);
             player.setY(y);
             result = Living.MoveResult.SUCCESS;
         }
         return result;
+    }
+
+    private void pickupItem(Item item) {
+        ConsoleIO.println("You found a " + item.getName(),
+                item.getDescription());
+        Ability newAbility = abilities.get(random.nextInt(abilities.size()));
+        if (player.hasAbility(newAbility.getName())) {
+            ConsoleIO.println("You already had the ability " + newAbility.getName());
+        } else {
+            ConsoleIO.println("You obtained the ability " + newAbility.getName());
+        }
+        player.addAbility(newAbility);
     }
 
     private void updateHidden() {
@@ -215,11 +243,12 @@ public class Map {
                     // get the current layout
                     String layout = tile.getLayout()[row];
                     // If it's the center row and the tile has an entity on it, replace the center with the entity icon
-                    if (drawHidden && tile.isHidden()) {
-                        for (int i = 0; i < Tile.tileWidth; i++) {
-                            drawnMap.append(HIDDEN_TILE);
-                        }
-                    } else if (row == Tile.tileVerticalMid && tile.getMember() != null) {
+//                    if (drawHidden && tile.isHidden()) {
+//                        for (int i = 0; i < Tile.tileWidth; i++) {
+//                            drawnMap.append(HIDDEN_TILE);
+//                        }
+//                    } else
+                        if (row == Tile.tileVerticalMid && tile.getMember() != null) {
                         drawnMap.append(layout.substring(0, Tile.tileHorizontalMid))
                                 .append(tile.getMember().getIcon())
                                 .append(layout.substring(Tile.tileHorizontalMid + 1));
@@ -241,7 +270,7 @@ public class Map {
         List<Enemy> enemies = new ArrayList<>();
         for (int h = 0; h < height; h++) {
             for (int w = 0; w < width; w++) {
-                if (!(h < startY + 1 && h > startY - 1 && w < startX + 1 && w > startX - 1) && random.nextInt(100) > 65 && (h != exitY && w != exitX)) {
+                if (!(h < startY + 1 && h > startY - 1 && w < startX + 1 && w > startX - 1) && random.nextInt(100) > 80 && (h != exitY && w != exitX)) {
                     Enemy enemy = new Enemy(enemyNames.get(random.nextInt(enemyNames.size())),
                             depth,
                             random.nextInt(ENEMY_HEALTH_LIMIT) + 1 + depth,

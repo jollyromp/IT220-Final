@@ -20,7 +20,7 @@ public class Player extends Living {
 
     public void levelUp() {
         level++;
-        health += 5;
         damage++;
+        health+=damage*2;
     }
 }

@@ -31,7 +31,7 @@ public class CombatEvent {
             return false;
         }
         if (enemy.getHealth() <= 0) {
-            player.levelUp();
+            player.takeDamage(-player.getDamage()*2);
             return true;
         }
 

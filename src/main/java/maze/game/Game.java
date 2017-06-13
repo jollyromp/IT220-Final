@@ -7,10 +7,7 @@ package maze.game;
  * Final - The game class, runs the loop and manages state
  */
 
-import maze.entity.Enemy;
-import maze.entity.Exit;
-import maze.entity.Living;
-import maze.entity.Player;
+import maze.entity.*;
 import maze.io.ConsoleIO;
 import maze.map.Map;
 
@@ -27,6 +24,7 @@ public class Game {
 
     private Player player;
     private List<Enemy> enemies;
+    private List<Item> items;
     private Map currentMap;
 
     private final ThreadLocalRandom random = ThreadLocalRandom.current();
