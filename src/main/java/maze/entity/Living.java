@@ -83,6 +83,7 @@ public class Living extends Entity {
     public enum MoveResult {
         WALL,
         ENEMY,
-        SUCCESS
+        SUCCESS,
+        EXIT
     }
 }
