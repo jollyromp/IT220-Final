@@ -1,8 +1,5 @@
 package maze.entity.abilities;
 
-import java.io.File;
-import java.util.Scanner;
-
 /*
  * Name: Caleb Snoozy
  * Date: 6/7/2017
@@ -10,8 +7,6 @@ import java.util.Scanner;
  * description
  */
 public class Ability {
-
-    private Scanner reader = new Scanner(new File("abilities.txt"));
 
     private String name;
     private String description;
@@ -32,15 +27,21 @@ public class Ability {
         this.damageMax = damageMax;
     }
 
-    public int getDamageMin() { return damageMin; }
+    public int getDamageMin() {
+        return damageMin;
+    }
 
-    public int getDamageMax() { return damageMax; }
+    public int getDamageMax() {
+        return damageMax;
+    }
 
     public String getName() {
         return name;
     }
 
-    public String getDescription() { return description; }
+    public String getDescription() {
+        return description;
+    }
 
     public String toString() {
         return name + " (" + damageMin + "-" + damageMax + "): " + description;
