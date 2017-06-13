@@ -33,7 +33,7 @@ public class Map {
     private boolean[][] north, east, south, west, visited;
     private int width, height, depth, longestPath, exitX, exitY;
     private Tile[][] map;
-    private Random random = new Random();
+    private Random random = new Random(123);
     private Player player;
 
     public Map(int width, int height, int depth) {
@@ -43,7 +43,6 @@ public class Map {
 
         map = new Tile[height][width];
         generateTiles();
-        map[0][0].setHidden(false);
     }
 
     public void setPlayer(Player player) {
@@ -51,6 +50,7 @@ public class Map {
         this.player.setX(0);
         this.player.setY(0);
         map[0][0].setMember(player);
+        updateHidden();
     }
 
     public String miniMap() {
@@ -118,9 +118,26 @@ public class Map {
         }
 
         map[player.getY()][player.getX()].setMember(player);
-        map[player.getY()][player.getX()].setHidden(false);
+        updateHidden();
 
         return result;
+    }
+
+    private void updateHidden() {
+        Tile currentTile = map[player.getY()][player.getX()];
+        currentTile.setHidden(false);
+        if (currentTile.canMoveUp()) {
+            map[player.getY()-1][player.getX()].setHidden(false);
+        }
+        if (currentTile.canMoveDown()) {
+            map[player.getY()+1][player.getX()].setHidden(false);
+        }
+        if (currentTile.canMoveLeft()) {
+            map[player.getY()][player.getX()-1].setHidden(false);
+        }
+        if (currentTile.canMoveRight()) {
+            map[player.getY()][player.getX()+1].setHidden(false);
+        }
     }
 
     public Living.MoveResult moveEnemy(Enemy enemy, Enemy.Move move) {
@@ -161,11 +178,12 @@ public class Map {
                     // get the current layout
                     String layout = tile.getLayout()[row];
                     // If it's the center row and the tile has an entity on it, replace the center with the entity icon
-                    if (drawHidden && tile.isHidden()) {
-                        for (int i = 0; i < Tile.tileWidth; i++) {
-                            drawnMap.append(HIDDEN_TILE);
-                        }
-                    } else if (row == Tile.tileVerticalMid && tile.getMember() != null) {
+//                    if (drawHidden && tile.isHidden()) {
+//                        for (int i = 0; i < Tile.tileWidth; i++) {
+//                            drawnMap.append(HIDDEN_TILE);
+//                        }
+//                    } else
+                    if (row == Tile.tileVerticalMid && tile.getMember() != null) {
                         drawnMap.append(layout.substring(0, Tile.tileHorizontalMid))
                                 .append(tile.getMember().getIcon())
                                 .append(layout.substring(Tile.tileHorizontalMid + 1));
