@@ -17,7 +17,7 @@ public class Living extends Entity {
     private String name, icon;
     private int level, health, damage, x, y;
 
-    private List<Ability> abilities = new ArrayList<>();
+    protected List<Ability> abilities = new ArrayList<>();
 
     public Living(String name, String icon, int level, int health, int damage) {
         this.name = name;
@@ -69,9 +69,27 @@ public class Living extends Entity {
         return abilities;
     }
 
+    public boolean hasAbility(String search) {
+        for(Ability ability : abilities) {
+            if (ability.getName().equalsIgnoreCase(search)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Ability getAbility(String search) {
+        for(Ability ability : abilities) {
+            if (ability.getName().equalsIgnoreCase(search)) {
+                return ability;
+            }
+        }
+        return null;
+    }
+
     public boolean takeDamage(int damage) {
-        this.damage -= damage;
-        if (this.damage <= 0)
+        this.health -= damage;
+        if (this.health <= 0)
             return false;
         return true;
     }
@@ -84,6 +102,7 @@ public class Living extends Entity {
         WALL,
         ENEMY,
         SUCCESS,
-        EXIT
+        EXIT,
+        LOSE
     }
 }

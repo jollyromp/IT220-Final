@@ -7,10 +7,12 @@ package maze.map;
  * IT220-Final - description
  */
 
+import maze.combat.CombatEvent;
 import maze.entity.Enemy;
 import maze.entity.Exit;
 import maze.entity.Living;
 import maze.entity.Player;
+import maze.io.ConsoleIO;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,8 +35,9 @@ public class Map {
     private boolean[][] north, east, south, west, visited;
     private int width, height, depth, longestPath, exitX, exitY, startX, startY;
     private Tile[][] map;
-    private Random random = new Random(123);
+    private Random random = new Random();
     private Player player;
+    private boolean win;
 
     public Map(int width, int height, int depth) {
         this.width = width;
@@ -69,6 +72,7 @@ public class Map {
                     // get the current layout
                     String layout = tile.getMiniLayout()[row];
                     // If it's the center row and the tile has an entity on it, replace the center with the entity icon
+
                     if (tile.isHidden()) {
                         for (int i = 0; i < Tile.miniWidth; i++) {
                             drawnMap.append(HIDDEN_TILE);
@@ -91,50 +95,41 @@ public class Map {
         Living.MoveResult result = Living.MoveResult.WALL;
         map[player.getY()][player.getX()].setMember(null);
         if (move.equals(Player.Move.DOWN) && map[player.getY()][player.getX()].canMoveDown()) { // Move down
-            if (map[player.getY() + 1][player.getX()].hasMember())
-                if (map[player.getY() + 1][player.getX()].getMember() instanceof Exit)
-                    result = Living.MoveResult.EXIT;
-                else
-                    result = Living.MoveResult.ENEMY;
-            else {
-                player.setY(player.getY() + 1);
-                result = Living.MoveResult.SUCCESS;
-            }
+            result = moveCheck(player.getX(), player.getY() + 1);
         } else if (move.equals(Player.Move.UP) && map[player.getY()][player.getX()].canMoveUp()) { // Move up
-            if (map[player.getY() - 1][player.getX()].hasMember())
-                if (map[player.getY() - 1][player.getX()].getMember() instanceof Exit)
-                    result = Living.MoveResult.EXIT;
-                else
-                    result = Living.MoveResult.ENEMY;
-            else {
-                player.setY(player.getY() - 1);
-                result = Living.MoveResult.SUCCESS;
-            }
+            result = moveCheck(player.getX(), player.getY() - 1);
         } else if (move.equals(Player.Move.RIGHT) && map[player.getY()][player.getX()].canMoveRight()) { // Move right
-            if (map[player.getY()][player.getX() + 1].hasMember())
-                if (map[player.getY()][player.getX() + 1].getMember() instanceof Exit)
-                    result = Living.MoveResult.EXIT;
-                else
-                    result = Living.MoveResult.ENEMY;
-            else {
-                player.setX(player.getX() + 1);
-                result = Living.MoveResult.SUCCESS;
-            }
+            result = moveCheck(player.getX() + 1, player.getY());
         } else if (move.equals(Player.Move.LEFT) && map[player.getY()][player.getX()].canMoveLeft()) { // Move left
-            if (map[player.getY()][player.getX() - 1].hasMember())
-                if (map[player.getY()][player.getX() - 1].getMember() instanceof Exit)
-                    result = Living.MoveResult.EXIT;
-                else
-                    result = Living.MoveResult.ENEMY;
-            else {
-                player.setX(player.getX() - 1);
-                result = Living.MoveResult.SUCCESS;
-            }
+            result = moveCheck(player.getX() - 1, player.getY());
         }
 
         map[player.getY()][player.getX()].setMember(player);
         updateHidden();
 
+        return result;
+    }
+
+    private Living.MoveResult moveCheck(int x, int y) {
+        Living.MoveResult result;
+        if (map[y][x].hasMember())
+            if (map[y][x].getMember() instanceof Exit) {
+                result = Living.MoveResult.EXIT;
+            }
+            if(map[y][x].getMember() instanceof Enemy) {
+                CombatEvent combat = new CombatEvent(player, (Enemy)map[y][x].getMember());
+                if (combat.combatLoop()) {
+                    ConsoleIO.println("You have defeated: " + map[y][x].getMember().getName());
+                    result = Living.MoveResult.ENEMY;
+                } else {
+                    result = Living.MoveResult.LOSE;
+                }
+            }
+        else {
+            player.setX(x);
+            player.setY(y);
+            result = Living.MoveResult.SUCCESS;
+        }
         return result;
     }
 
@@ -172,7 +167,9 @@ public class Map {
             result = Living.MoveResult.SUCCESS;
         }
 
-        map[enemy.getY()][enemy.getX()].setMember(enemy);
+        if (enemy.getHealth() > 0) {
+            map[enemy.getY()][enemy.getX()].setMember(enemy);
+        }
 
         return result;
     }
@@ -193,12 +190,11 @@ public class Map {
                     // get the current layout
                     String layout = tile.getLayout()[row];
                     // If it's the center row and the tile has an entity on it, replace the center with the entity icon
-//                    if (drawHidden && tile.isHidden()) {
-//                        for (int i = 0; i < Tile.tileWidth; i++) {
-//                            drawnMap.append(HIDDEN_TILE);
-//                        }
-//                    } else
-                    if (row == Tile.tileVerticalMid && tile.getMember() != null) {
+                    if (drawHidden && tile.isHidden()) {
+                        for (int i = 0; i < Tile.tileWidth; i++) {
+                            drawnMap.append(HIDDEN_TILE);
+                        }
+                    } else if (row == Tile.tileVerticalMid && tile.getMember() != null) {
                         drawnMap.append(layout.substring(0, Tile.tileHorizontalMid))
                                 .append(tile.getMember().getIcon())
                                 .append(layout.substring(Tile.tileHorizontalMid + 1));
@@ -221,7 +217,7 @@ public class Map {
         for (int h = 0; h < height; h++) {
             for (int w = 0; w < width; w++) {
                 if (!(h < startY + 1 && h > startY - 1 && w < startX + 1 && w > startX - 1) && random.nextInt(100) > 65 && (h != exitY && w != exitX)) {
-                    Enemy enemy = new Enemy("NEEDS A NAME", Enemy.getRandomIcon(), depth, 10 * depth, 2 * depth);
+                    Enemy enemy = new Enemy("NEEDS A NAME", depth, 10 * depth, 2 * depth);
                     enemy.setX(w);
                     enemy.setY(h);
                     enemies.add(enemy);

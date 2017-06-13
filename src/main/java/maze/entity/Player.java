@@ -9,24 +9,13 @@ import maze.entity.abilities.Ability;
  * Player.java
  * IT220-Final -
  */
-public class Player extends Living implements Combat {
+public class Player extends Living {
 
-    public static final String ICON = "\uD83D\uDF9C";
+    private static final String ICON = "\uD83D\uDF9C";
 
-    public Player(String name, String icon) {
-        super(name, icon, 1, 20, 5);
-
-        // Add Abilities
+    public Player(String name) {
+        super(name, ICON, 1, 20, 1);
+        abilities.add(Ability.BASIC_ABILITY);
     }
 
-    @Override
-    public boolean basicAttack(Living target) {
-        return (target.takeDamage(getDamage()));
-    }
-
-    @Override
-    public boolean useAbility(Living target, Ability ability) {
-        ability.use(target);
-        return true;
-    }
 }

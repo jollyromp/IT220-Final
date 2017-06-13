@@ -37,7 +37,7 @@ public class Game {
     }
 
     private void init() {
-        player = new Player(ConsoleIO.nextLine("What is your hero's name", ConsoleIO.NOT_EMPTY, s -> s), Player.ICON);
+        player = new Player(ConsoleIO.nextLine("What is your hero's name", ConsoleIO.NOT_EMPTY, s -> s));
         currentMap = new Map(random.nextInt(MIN_MAP_SIZE, MAX_MAP_SIZE), random.nextInt(MIN_MAP_SIZE, MAX_MAP_SIZE), depth);
         currentMap.setPlayer(player);
         enemies = currentMap.createMonsters();
@@ -114,14 +114,24 @@ public class Game {
                 ConsoleIO.println("You can't go that way.");
                 break;
             case ENEMY:
-                ConsoleIO.println("There is an enemy in the way.");
-                break;
+                removeEnemy(player.getX(), player.getY());
+                return false;
             case SUCCESS:
                 return false;
             case EXIT:
                 return false;
         }
         return true;
+    }
+
+    private boolean removeEnemy(int x, int y) {
+        for (Enemy enemy : enemies) {
+            if (enemy.getX() == x && enemy.getY() == y) {
+                enemies.remove(enemy);
+                return true;
+            }
+        }
+        return false;
     }
 
     private void showHelp() {

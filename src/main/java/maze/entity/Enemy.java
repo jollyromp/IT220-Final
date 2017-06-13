@@ -10,27 +10,13 @@ import java.util.Random;
  * *.java
  * description
  */
-public class Enemy extends Living implements Combat {
+public class Enemy extends Living {
 
     private static Random random = new Random();
-    private static String[] icons = {"\uD83D\uDFA7", "\uD83D\uDFAE", "\uD83D\uDFB4", "\uD83D\uDFBA", "\uD83D\uDFBF"};
+    private static final String ICON = "\uD83D\uDFBA";
 
-    public Enemy(String name, String icon, int level, int health, int damage) {
-        super(name, icon, level, health, damage);
-    }
-
-    @Override
-    public boolean basicAttack(Living target) {
-        return target.takeDamage(getDamage());
-    }
-
-    @Override
-    public boolean useAbility(Living target, Ability ability) {
-        ability.use(target);
-        return true;
-    }
-
-    public static String getRandomIcon() {
-        return icons[random.nextInt(icons.length)];
+    public Enemy(String name, int level, int health, int damage) {
+        super(name, ICON, level, health, damage);
+        abilities.add(Ability.BASIC_ABILITY);
     }
 }

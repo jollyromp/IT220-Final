@@ -14,23 +14,35 @@ public class Ability {
 
     private String name;
     private String description;
-    private Consumer<Living> logic;
+    private int damageMin;
+    private int damageMax;
 
-    public Ability(String name, String description, Consumer<Living> logic) {
+    private static final String BASIC_ATTACK = "Strike";
+    private static final String BASIC_DESCRIPTION = "A basic punch.";
+    private static final int DAMAGE_MIN = 3;
+    private static final int DAMAGE_MAX = 5;
+
+    public static Ability BASIC_ABILITY = new Ability(BASIC_ATTACK, BASIC_DESCRIPTION, DAMAGE_MIN, DAMAGE_MAX);
+
+    public Ability(String name, String description, int damageMin, int damageMax) {
         this.name = name;
         this.description = description;
-        this.logic = logic;
+        this.damageMin = damageMin;
+        this.damageMax = damageMax;
     }
 
-    public void use(Living target) {
-        logic.accept(target);
-    }
+    public int getDamageMin() { return damageMin; }
+
+    public int getDamageMax() { return damageMax; }
 
     public String getName() {
         return name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDescription() { return description; }
+
+    public String toString() {
+        return name + " (" + damageMin + "-" + damageMax + "): " + description;
     }
+
 }
