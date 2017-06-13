@@ -5,3 +5,5 @@ Harass,0,1,A weak attack meant to distract.
 Kick,4,6,A swing of the legs at the target.
 Strangle,0,8,An attempt to choke the target.
 Crush,10,10,A devastating blow.
+Fireball,3,9,A small flaming projectile shot at the target.
+Quake,0,12,Slam the ground shaking the earth under the target.

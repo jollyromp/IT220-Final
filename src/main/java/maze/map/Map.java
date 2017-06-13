@@ -4,7 +4,7 @@ package maze.map;
  * 6/7/2017
  * maze.map
  * Map.java
- * IT220-Final - description
+ * IT220-Final - The map object
  */
 
 import maze.Driver;
@@ -13,8 +13,10 @@ import maze.entity.*;
 import maze.entity.abilities.Ability;
 import maze.io.ConsoleIO;
 
-import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Generates a maze and does rendering.
@@ -32,7 +34,7 @@ public class Map {
     public static final int ENEMY_DAMAGE_LIMIT = 4;
     public static final int ITEM_AMOUNT = 6;
     public static final String RUNE_NAME = "Rune";
-    public static final String RUNE_DESCTIPTION = "This small stone contains an ability";
+    public static final String RUNE_DESCRIPTION = "This small stone contains an ability";
 
     private final char HIDDEN_TILE = '▒';
 
@@ -44,6 +46,11 @@ public class Map {
     private Player player;
     private boolean win;
 
+    /**
+     * @param width map width
+     * @param height map height
+     * @param depth current depth, for enemy scaling
+     */
     public Map(int width, int height, int depth) {
         this.width = width;
         this.height = height;
@@ -55,15 +62,19 @@ public class Map {
         map = new Tile[height][width];
         generateTiles();
 
+        // Add items to the map
         for (int i = 0; i < ITEM_AMOUNT; i++) {
             int randX = random.nextInt(width);
             int randY = random.nextInt(height);
             if (map[randY][randX].getMember() == null) {
-                map[randY][randX].setMember(new Item(RUNE_NAME, RUNE_DESCTIPTION));
+                map[randY][randX].setMember(new Item(RUNE_NAME, RUNE_DESCRIPTION));
             }
         }
     }
 
+    /**
+     * @param player add the player to the map, used to keep the player persistent
+     */
     public void setPlayer(Player player) {
         this.player = player;
         this.player.setX(startX);
@@ -72,6 +83,9 @@ public class Map {
         updateHidden();
     }
 
+    /**
+     * @return the built minimap string to be printed out
+     */
     public String miniMap() {
         StringBuilder drawnMap = new StringBuilder();
         // For each row of tile around the player
@@ -104,6 +118,10 @@ public class Map {
         return drawnMap.toString();
     }
 
+    /**
+     * @param move Direction to move the player
+     * @return what did the player encounter
+     */
     public Living.MoveResult movePlayer(Player.Move move) {
         Living.MoveResult result = Living.MoveResult.WALL;
         map[player.getY()][player.getX()].setMember(null);
@@ -123,13 +141,17 @@ public class Map {
         return result;
     }
 
+    /**
+     * @param x change in X
+     * @param y change in Y
+     * @return what did the player encounter
+     */
     private Living.MoveResult moveCheck(int x, int y) {
         Living.MoveResult result = Living.MoveResult.WALL;
         if (map[y][x].hasMember()) {
             if (map[y][x].getMember() instanceof Exit) {
                 result = Living.MoveResult.EXIT;
-            }
-            if (map[y][x].getMember() instanceof Enemy) {
+            } else if (map[y][x].getMember() instanceof Enemy) {
                 ConsoleIO.println("You have encountered " + map[y][x].getMember().getName() + "!");
                 CombatEvent combat = new CombatEvent(player, (Enemy) map[y][x].getMember());
                 if (combat.combatLoop()) {
@@ -140,8 +162,7 @@ public class Map {
                 } else {
                     result = Living.MoveResult.LOSE;
                 }
-            }
-            if (map[y][x].getMember() instanceof Item) {
+            } else if (map[y][x].getMember() instanceof Item) {
                 pickupItem((Item) map[y][x].getMember());
                 player.levelUp();
                 map[y][x].setMember(null);
@@ -157,6 +178,9 @@ public class Map {
         return result;
     }
 
+    /**
+     * @param item Item that was found
+     */
     private void pickupItem(Item item) {
         ConsoleIO.println("You found a " + item.getName(),
                 item.getDescription());
@@ -169,6 +193,9 @@ public class Map {
         player.addAbility(newAbility);
     }
 
+    /**
+     * Reveals tiles that the player has visited and can see
+     */
     private void updateHidden() {
         Tile currentTile = map[player.getY()][player.getX()];
         currentTile.setHidden(false);
@@ -186,6 +213,11 @@ public class Map {
         }
     }
 
+    /**
+     * @param enemy Enemy to move
+     * @param move Where they want to moved to
+     * @return What did they encounter
+     */
     public Living.MoveResult moveEnemy(Enemy enemy, Enemy.Move move) {
         Living.MoveResult result = Living.MoveResult.WALL;
         map[enemy.getY()][enemy.getX()].setMember(null);
@@ -212,6 +244,8 @@ public class Map {
 
     /**
      * Draw the full map
+     * @param drawHidden if false, draw all tiles
+     * @return the built string
      */
     public String map(boolean drawHidden) {
         StringBuilder drawnMap = new StringBuilder();
@@ -244,10 +278,9 @@ public class Map {
         return drawnMap.toString();
     }
 
-    public boolean isOnExit() {
-        return player.getX() == exitX && player.getY() == exitY;
-    }
-
+    /**
+     * @return Create the monsters randomly on the map
+     */
     public List<Enemy> createMonsters() {
         List<Enemy> enemies = new ArrayList<>();
         for (int h = 0; h < height; h++) {
@@ -267,7 +300,6 @@ public class Map {
                 }
             }
         }
-
         return enemies;
     }
 
@@ -312,6 +344,11 @@ public class Map {
         map[exitY][exitX].setMember(exit);
     }
 
+    /**
+     * @param x current X
+     * @param y current Y
+     * @param lengthFromStart depth of the generation
+     */
     private void generate(int x, int y, int lengthFromStart) {
         visited[y][x] = true;
         if (lengthFromStart > longestPath) {
@@ -319,6 +356,8 @@ public class Map {
             exitX = x - 1;
             exitY = y - 1;
         }
+
+        // if the current tile has a non visited neighbor
         while (!visited[y][x + 1] || !visited[y + 1][x] || !visited[y][x - 1] || !visited[y - 1][x])
             while (true) {
                 int r = random.nextInt(4);
@@ -342,6 +381,9 @@ public class Map {
             }
     }
 
+    /**
+     * @return Get the exit object
+     */
     public Exit getExit() {
         return exit;
     }

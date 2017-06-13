@@ -1,17 +1,17 @@
 package maze.entity;
+/*
+ * Caleb Snoozy, Jacob Tran
+ * 6/7/2017
+ * maze.entity
+ * Entity.java
+ * IT220-Final - A Living entity
+ */
 
 import maze.entity.abilities.Ability;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/*
- * Caleb Snoozy
- * 6/7/2017
- * maze.entity
- * Entity.java
- * IT220-Final - description
- */
 public class Living extends Entity {
 
     private String name, icon;

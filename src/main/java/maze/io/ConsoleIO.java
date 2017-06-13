@@ -7,6 +7,7 @@ package maze.io;
  * IT220-Final - Utility to interact with the users console
  */
 
+import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.function.Predicate;
@@ -35,18 +36,14 @@ public class ConsoleIO {
      * Prints each variable string as a new line.
      */
     public static void println(String... args) {
-        for (String line : args) {
-            System.out.println(line);
-        }
+        Arrays.stream(args).forEach(System.out::println);
     }
 
     /**
      * prints each variable object.map as a new line.
      */
     public static void println(Object... args) {
-        for (Object object : args) {
-            System.out.println(object);
-        }
+        Arrays.stream(args).forEach(System.out::println);
     }
 
     /**
@@ -54,9 +51,7 @@ public class ConsoleIO {
      * No extra formatting.
      */
     public static void print(String... args) {
-        for (String phrase : args) {
-            System.out.print(phrase);
-        }
+        Arrays.stream(args).forEach(System.out::print);
     }
 
     /**
@@ -64,9 +59,7 @@ public class ConsoleIO {
      * No extra formatting.
      */
     public static void print(Object... args) {
-        for (Object phrase : args) {
-            System.out.print(phrase);
-        }
+        Arrays.stream(args).forEach(System.out::print);
     }
 
     /**

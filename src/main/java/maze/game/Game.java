@@ -17,6 +17,9 @@ import maze.map.Map;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * The game class with logic and looping
+ */
 public class Game {
     private static final int MIN_MAP_SIZE = 5;
     private static final int MAX_MAP_SIZE = 10;
@@ -25,19 +28,26 @@ public class Game {
     private boolean lose = false;
     private int depth = 1;
 
+    // Game objects
     private Player player;
     private List<Enemy> enemies;
-    private List<Item> items;
     private Map currentMap;
 
+    // Random implementation with pre made lower and higher bounds random
     private final ThreadLocalRandom random = ThreadLocalRandom.current();
 
+    /**
+     * The game object constructor
+     */
     public Game() {
         init();
         run();
         System.exit(0);
     }
 
+    /**
+     * Create the initial player and map
+     */
     private void init() {
         player = new Player(ConsoleIO.nextLine("What is your hero's name", ConsoleIO.NOT_EMPTY, s -> s));
         currentMap = new Map(random.nextInt(MIN_MAP_SIZE, MAX_MAP_SIZE), random.nextInt(MIN_MAP_SIZE, MAX_MAP_SIZE), depth);
@@ -67,22 +77,22 @@ public class Game {
                         ConsoleIO.println(currentMap.map(false));
                         ConsoleIO.waitForEnter();
                         break;
-                    case "down":
+                    case "down": // Move down
                         doTimelyAction = action(currentMap.movePlayer(Player.Move.DOWN));
                         break;
-                    case "up":
+                    case "up": // Move up
                         doTimelyAction = action(currentMap.movePlayer(Player.Move.UP));
                         break;
-                    case "left":
+                    case "left": // Move left
                         doTimelyAction = action(currentMap.movePlayer(Player.Move.LEFT));
                         break;
-                    case "right":
+                    case "right": // Move right
                         doTimelyAction = action(currentMap.movePlayer(Player.Move.RIGHT));
                         break;
-                    case "help":
+                    case "help": // Show help
                         showHelp();
                         break;
-                    default:
+                    default: // invalid command
                         ConsoleIO.println("Please enter a valid command");
                 }
                 if (quit) { // quit out before other actions
@@ -90,37 +100,32 @@ public class Game {
                     break;
                 }
             }
-            // Player checks
-            if (currentMap.isOnExit()) {
-                ConsoleIO.println(currentMap.miniMap(), "Floor complete!");
-                currentMap = new Map(random.nextInt(MIN_MAP_SIZE, MAX_MAP_SIZE), random.nextInt(MIN_MAP_SIZE, MAX_MAP_SIZE), ++depth);
-                currentMap.setPlayer(player);
-                enemies = currentMap.createMonsters();
-            }
-
-            // Enemy actions
+            // Enemy movement
             enemies.forEach(enemy -> currentMap.moveEnemy(enemy, Enemy.Move.values()[random.nextInt(Enemy.Move.values().length)]));
-
-//            if (random.nextInt(100) > 75) {
-//                // random event
-//                ConsoleIO.println("===== Event =====", player.getName() + " trips on a spike.", "=================");
-//            }
         }
     }
 
+    /**
+     * @param result What happened when the player moved
+     * @return false if the action should progress the game loop or request a new prompt
+     */
     private boolean action(Living.MoveResult result) {
         switch (result) {
-            case WALL:
+            case WALL: // The player tried to move into a wall
                 ConsoleIO.println("You can't go that way.");
                 break;
-            case ENEMY:
-                removeEnemy(player.getX(), player.getY());
+            case ENEMY: // The player fought and won against an enemy
+                removeEnemy(player.getX(), player.getY()); // remove the enemy
                 return false;
-            case SUCCESS:
+            case SUCCESS: // The movement was a success
                 return false;
-            case EXIT:
+            case EXIT: // The player found the exit
+                ConsoleIO.println(currentMap.miniMap(), "===== ===== =====", "Floor complete!", "===== ===== =====");
+                currentMap = new Map(random.nextInt(MIN_MAP_SIZE, MAX_MAP_SIZE), random.nextInt(MIN_MAP_SIZE, MAX_MAP_SIZE), ++depth);
+                currentMap.setPlayer(player);
+                enemies = currentMap.createMonsters();
                 return false;
-            case LOSE:
+            case LOSE: // The player lost their life
                 running = false;
                 lose = true;
                 return false;
@@ -128,6 +133,11 @@ public class Game {
         return true;
     }
 
+    /**
+     * @param x Grid x Position
+     * @param y Grid y Position
+     * @return true if the enemy was found and removed
+     */
     private boolean removeEnemy(int x, int y) {
         Enemy toRemove = null;
         for (Enemy enemy : enemies) {
@@ -137,6 +147,9 @@ public class Game {
         return enemies.remove(toRemove);
     }
 
+    /**
+     * printout the command help lines
+     */
     private void showHelp() {
         ConsoleIO.println(
                 "===== ===== ===== Help ===== ===== =====",

@@ -1,15 +1,16 @@
 package maze.entity;
+/*
+ * Caleb Snoozy, Jacob Tran
+ * 6/7/2017
+ * maze.entity
+ * Enemy.java
+ * IT220-Final - An enemy object
+ */
 
 import maze.entity.abilities.Ability;
 
 import java.util.Random;
 
-/*
- * Name: Caleb Snoozy
- * Date: 6/7/2017
- * *.java
- * description
- */
 public class Enemy extends Living {
 
     private static Random random = new Random();

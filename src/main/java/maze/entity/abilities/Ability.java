@@ -1,11 +1,12 @@
 package maze.entity.abilities;
-
 /*
- * Name: Caleb Snoozy
- * Date: 6/7/2017
- * *.java
- * description
+ * Caleb Snoozy, Jacob Tran
+ * 6/7/2017
+ * maze.entity.abilities
+ * Ability.java
+ * IT220-Final - An ability object
  */
+
 public class Ability {
 
     private String name;
@@ -13,12 +14,7 @@ public class Ability {
     private int damageMin;
     private int damageMax;
 
-    private static final String BASIC_ATTACK = "Strike";
-    private static final String BASIC_DESCRIPTION = "A basic punch.";
-    private static final int DAMAGE_MIN = 3;
-    private static final int DAMAGE_MAX = 5;
-
-    public static Ability BASIC_ABILITY = new Ability(BASIC_ATTACK, BASIC_DESCRIPTION, DAMAGE_MIN, DAMAGE_MAX);
+    public static final Ability BASIC_ABILITY = new Ability("Strike", "A basic punch.", 3, 5);
 
     public Ability(String name, String description, int damageMin, int damageMax) {
         this.name = name;

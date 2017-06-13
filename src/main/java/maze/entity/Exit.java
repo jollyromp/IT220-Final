@@ -6,7 +6,7 @@ package maze.entity;/*
  * IT220-Final - description
  */
 
-public class Exit extends Entity{
+public class Exit extends Entity {
 
     private String name;
     private String icon = "\uD83D\uDF91";

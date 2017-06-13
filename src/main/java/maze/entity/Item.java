@@ -1,11 +1,12 @@
 package maze.entity;
-
 /*
- * Name: Caleb Snoozy
- * Date: 6/7/2017
- * *.java
- * description
+ * Caleb Snoozy, Jacob Tran
+ * 6/7/2017
+ * maze.entity
+ * Item.java
+ * IT220-Final - An item object
  */
+
 public class Item extends Entity {
 
     private String name;

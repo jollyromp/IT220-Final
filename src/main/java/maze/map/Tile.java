@@ -36,10 +36,23 @@ public class Tile {
     // If not null, what entity is on this tile, used for graphic representation
     private Entity member;
 
+    /**
+     * @param up    is there an up corridor
+     * @param down  is there an down corridor
+     * @param left  is there an left corridor
+     * @param right is there an right corridor
+     */
     public Tile(boolean up, boolean down, boolean left, boolean right) {
         this(up, down, left, right, null);
     }
 
+    /**
+     * @param up     is there an up corridor
+     * @param down   is there an down corridor
+     * @param left   is there an left corridor
+     * @param right  is there an right corridor
+     * @param member the entity on the tile
+     */
     public Tile(boolean up, boolean down, boolean left, boolean right, Entity member) {
         this.up = up;
         this.down = down;
@@ -65,9 +78,9 @@ public class Tile {
     /**
      * Create the tile on demand based of the provided details
      *
-     * @param width width of the tile
-     * @param height height of the tile
-     * @param verticalMid center point of the vertical height
+     * @param width         width of the tile
+     * @param height        height of the tile
+     * @param verticalMid   center point of the vertical height
      * @param horizontalMid center point of the horizontal width
      * @return the tile array
      */
@@ -123,7 +136,10 @@ public class Tile {
         this.member = entity;
     }
 
-    public boolean hasMember(){
+    /**
+     * @return is there a member on the tile
+     */
+    public boolean hasMember() {
         return member != null;
     }
 

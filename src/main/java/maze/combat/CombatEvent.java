@@ -1,4 +1,11 @@
 package maze.combat;
+/*
+ * Caleb Snoozy, Jacob Tran
+ * 6/12/2017
+ * maze.combat
+ * CombatEvent.java
+ * IT220-Final - The combat event
+ */
 
 import maze.entity.Enemy;
 import maze.entity.Living;
@@ -9,13 +16,6 @@ import maze.io.ConsoleIO;
 import java.io.Console;
 import java.util.Random;
 
-/*
- * Caleb Snoozy, Jacob Tran
- * 6/12/2017
- * maze.combat
- * CombatEvent.java
- * IT220-Final - The combat event
- */
 public class CombatEvent {
     private Player player;
     private Enemy enemy;

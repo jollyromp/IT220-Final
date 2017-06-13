@@ -15,40 +15,55 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.function.Consumer;
 
+/**
+ * Driver class with main, loads files and starts the game
+ */
 public class Driver {
     private static List<Ability> abilities = new ArrayList<>();
     private static List<String> enemyNames = new ArrayList<>();
 
-    private static Game game;
-
     public static void main(String[] args) {
-        try (Scanner scanner = new Scanner(new File(Driver.class.getResource("/abilities.txt").getFile()))) {
-            while (scanner.hasNext()) {
-                String[] segments = scanner.nextLine().split("[,]");
-                abilities.add(new Ability(segments[0], segments[3], Integer.parseInt(segments[1]), Integer.parseInt(segments[2])));
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
 
-        try (Scanner scanner = new Scanner(new File(Driver.class.getResource("/enemyNames.txt").getFile()))) {
-            while (scanner.hasNext()) {
-                enemyNames.add(scanner.nextLine());
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        // Load abilities from file
+        loadFile("/abilities.txt", s -> {
+            String[] segments = s.split("[,]");
+            abilities.add(new Ability(segments[0], segments[3], Integer.parseInt(segments[1]), Integer.parseInt(segments[2])));
+        });
 
-        // This is where we should load files and set generation settings
-        game = new Game();
+        // Load enemyNames from file
+        loadFile("/enemyNames.txt", enemyNames::add);
+
+        // Start the game
+        new Game();
     }
 
+    /**
+     * @return The list of abilities
+     */
     public static List<Ability> getAbilities() {
         return abilities;
     }
 
+    /**
+     * @return The list of enemy names
+     */
     public static List<String> getEnemyNames() {
         return enemyNames;
+    }
+
+    /**
+     * @param name Filename to load
+     * @param line Operation to preform on each line of the file
+     */
+    private static void loadFile(String name, Consumer<String> line) {
+        try (Scanner scanner = new Scanner(new File(Driver.class.getResource(name).getFile()))) {
+            while (scanner.hasNext()) {
+                line.accept(scanner.nextLine());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }
