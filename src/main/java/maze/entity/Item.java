@@ -9,12 +9,11 @@ package maze.entity;
 public class Item extends Entity {
 
     private String name;
-    private String icon;
+    private String icon = "\uD83D\uDFA7";
     private String description;
 
-    public Item(String name, String icon, String description) {
+    public Item(String name, String description) {
         this.name = name;
-        this.icon = icon;
         this.description = description;
     }
 

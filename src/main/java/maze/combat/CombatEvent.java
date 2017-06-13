@@ -1,6 +1,7 @@
 package maze.combat;
 
 import maze.entity.Enemy;
+import maze.entity.Living;
 import maze.entity.Player;
 import maze.entity.abilities.Ability;
 import maze.io.ConsoleIO;
@@ -30,11 +31,9 @@ public class CombatEvent {
             return false;
         }
         if (enemy.getHealth() <= 0) {
+            player.levelUp();
             return true;
         }
-
-        ConsoleIO.println("The fight continues...");
-        ConsoleIO.println();
 
         ConsoleIO.println(player.getName() + ": " + player.getHealth());
         ConsoleIO.println(enemy.getName() + ": " + enemy.getHealth());
@@ -52,17 +51,25 @@ public class CombatEvent {
             ConsoleIO.println();
             if (player.hasAbility(abilityInput)) {
                 abilityUsed = player.getAbility(abilityInput);
-                int damageTakenByEnemy = random.nextInt(abilityUsed.getDamageMax() + player.getDamage()
-                        - abilityUsed.getDamageMin() + 1) + abilityUsed.getDamageMin();
-                enemy.takeDamage(damageTakenByEnemy);
-                ConsoleIO.println("The Enemy was struck by " + abilityUsed.getName() + " for " + damageTakenByEnemy +
-                        " points of damage!");
+                calculateDamage(player, enemy, abilityUsed);
             } else {
                 ConsoleIO.println("That's not an ability you have!");
             }
-            ConsoleIO.println();
-        }while(abilityUsed == null);
+        } while(abilityUsed == null);
+
+        Ability enemyAbility = enemy.getAbilities().get(random.nextInt(enemy.getAbilities().size()));
+        calculateDamage(enemy, player, enemyAbility);
 
         return combatLoop();
+    }
+
+    private void calculateDamage(Living attacker, Living victim, Ability ability) {
+        int damage = random.nextInt(ability.getDamageMax() + attacker.getDamage()
+                - ability.getDamageMin() + 1) + ability.getDamageMin();
+        ConsoleIO.println(victim.getName() + " was struck by " + ability.getName() + " for " + damage +
+                " points of damage!");
+        victim.takeDamage(damage);
+
+        ConsoleIO.println();
     }
 }

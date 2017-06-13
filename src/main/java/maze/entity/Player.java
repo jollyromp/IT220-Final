@@ -18,4 +18,9 @@ public class Player extends Living {
         abilities.add(Ability.BASIC_ABILITY);
     }
 
+    public void levelUp() {
+        level++;
+        health += 5;
+        damage++;
+    }
 }

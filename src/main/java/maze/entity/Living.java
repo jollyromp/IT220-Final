@@ -15,7 +15,7 @@ import java.util.List;
 public class Living extends Entity {
 
     private String name, icon;
-    private int level, health, damage, x, y;
+    protected int level, health, damage, x, y;
 
     protected List<Ability> abilities = new ArrayList<>();
 

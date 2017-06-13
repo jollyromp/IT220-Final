@@ -99,8 +99,10 @@ public class ConsoleIO {
             try {
                 print(">>> ");
                 String input = scanner.nextLine();
-                if (inputRequirement.test(input))
+                if (inputRequirement.test(input)) {
+                    System.out.println();
                     return resultManipulation.apply(input);
+                }
             } catch (InputMismatchException ex) {
                 ex.printStackTrace();
             }

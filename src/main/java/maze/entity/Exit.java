@@ -9,11 +9,10 @@ package maze.entity;/*
 public class Exit extends Entity{
 
     private String name;
-    private String icon;
+    private String icon = "\uD83D\uDF91";
 
     public Exit() {
         name = "exit";
-        icon = "\uD83D\uDF91";
     }
 
     @Override

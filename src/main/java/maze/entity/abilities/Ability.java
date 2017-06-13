@@ -1,8 +1,7 @@
 package maze.entity.abilities;
 
-import maze.entity.Living;
-
-import java.util.function.Consumer;
+import java.io.File;
+import java.util.Scanner;
 
 /*
  * Name: Caleb Snoozy
@@ -11,6 +10,8 @@ import java.util.function.Consumer;
  * description
  */
 public class Ability {
+
+    private Scanner reader = new Scanner(new File("abilities.txt"));
 
     private String name;
     private String description;

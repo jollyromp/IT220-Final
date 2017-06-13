@@ -8,6 +8,7 @@ package maze.game;
  */
 
 import maze.entity.Enemy;
+import maze.entity.Exit;
 import maze.entity.Living;
 import maze.entity.Player;
 import maze.io.ConsoleIO;
@@ -21,6 +22,7 @@ public class Game {
     private static final int MAX_MAP_SIZE = 10;
     private boolean running = true;
     private boolean quit = false;
+    private boolean lose = false;
     private int depth = 1;
 
     private Player player;
@@ -47,6 +49,7 @@ public class Game {
      * The main game loop. Everything should be loaded before hand as this is a looping method
      */
     private void run() {
+        showHelp();
         while (running) {
             boolean doTimelyAction = true;
             // draw mini-map
@@ -74,7 +77,7 @@ public class Game {
                         doTimelyAction = action(currentMap.movePlayer(Player.Move.UP));
                         break;
                     case "left":
-                        doTimelyAction = action(currentMap.movePlayer(Player.Move.LEFT)) ;
+                        doTimelyAction = action(currentMap.movePlayer(Player.Move.LEFT));
                         break;
                     case "right":
                         doTimelyAction = action(currentMap.movePlayer(Player.Move.RIGHT));
@@ -120,6 +123,10 @@ public class Game {
                 return false;
             case EXIT:
                 return false;
+            case LOSE:
+                running = false;
+                lose = true;
+                return false;
         }
         return true;
     }
@@ -143,11 +150,20 @@ public class Game {
                 "down - to move down if possible",
                 "left - to move left if possible",
                 "right - to move right if possible",
+                "",
                 ">>> System <<<",
                 "quit - save and quits the game",
                 "save - saves the game",
-                "map - shows the full map, that has been explored",
-                "");
+                "map - shows the full map that has been explored",
+                "help = shows the help screen",
+                "",
+                "Map:",
+                player.getIcon() + ": Player",
+                currentMap.getExit().getIcon() + ": Exit",
+                enemies.get(0).getIcon() + ": Enemy",
+                "\uD83D\uDFA7: Item",
+                ""
+        );
     }
 
     /**

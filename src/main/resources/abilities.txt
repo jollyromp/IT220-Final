@@ -1,0 +1,7 @@
+Scratch,1,3,A clawing attack that swipes at the target.
+Rip,3,7,An attempt to rip the target to shreds.
+Maim,5,10,A powerful Scratch.
+Harass,0,1,A weak attack meant to distract.
+Kick,4,6,A swing of the legs at the target.
+Strangle,0,8,An attempt to choke the target.
+Crush,10,10,A devastating blow.

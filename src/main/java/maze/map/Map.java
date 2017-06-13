@@ -34,6 +34,7 @@ public class Map {
 
     private boolean[][] north, east, south, west, visited;
     private int width, height, depth, longestPath, exitX, exitY, startX, startY;
+    private Exit exit = new Exit();
     private Tile[][] map;
     private Random random = new Random();
     private Player player;
@@ -117,8 +118,11 @@ public class Map {
                 result = Living.MoveResult.EXIT;
             }
             if(map[y][x].getMember() instanceof Enemy) {
+                ConsoleIO.println("You have encountered " + map[y][x].getMember().getName() + "!");
                 CombatEvent combat = new CombatEvent(player, (Enemy)map[y][x].getMember());
                 if (combat.combatLoop()) {
+                    player.setX(x);
+                    player.setY(y);
                     ConsoleIO.println("You have defeated: " + map[y][x].getMember().getName());
                     result = Living.MoveResult.ENEMY;
                 } else {
@@ -267,7 +271,7 @@ public class Map {
         }
 
         // Add exit member
-        map[exitY][exitX].setMember(new Exit());
+        map[exitY][exitX].setMember(exit);
     }
 
     private void generate(int x, int y, int lengthFromStart) {
@@ -298,5 +302,9 @@ public class Map {
                     break;
                 }
             }
+    }
+
+    public Exit getExit(){
+        return exit;
     }
 }
