@@ -118,6 +118,8 @@ public class Game {
                 break;
             case SUCCESS:
                 return false;
+            case EXIT:
+                return false;
         }
         return true;
     }

@@ -31,7 +31,7 @@ public class Map {
     private final char HIDDEN_TILE = '▒';
 
     private boolean[][] north, east, south, west, visited;
-    private int width, height, depth, longestPath, exitX, exitY;
+    private int width, height, depth, longestPath, exitX, exitY, startX, startY;
     private Tile[][] map;
     private Random random = new Random();
     private Player player;
@@ -41,16 +41,19 @@ public class Map {
         this.height = height;
         this.depth = depth;
 
+        startX = random.nextInt(width - 1);
+        startY = random.nextInt(height - 1);
+
         map = new Tile[height][width];
         generateTiles();
-        map[0][0].setHidden(false);
+        map[startY][startX].setHidden(false);
     }
 
     public void setPlayer(Player player) {
         this.player = player;
-        this.player.setX(0);
-        this.player.setY(0);
-        map[0][0].setMember(player);
+        this.player.setX(startX);
+        this.player.setY(startY);
+        map[startY][startX].setMember(player);
     }
 
     public String miniMap() {
@@ -89,28 +92,40 @@ public class Map {
         map[player.getY()][player.getX()].setMember(null);
         if (move.equals(Player.Move.DOWN) && map[player.getY()][player.getX()].canMoveDown()) { // Move down
             if (map[player.getY() + 1][player.getX()].hasMember())
-                result = Living.MoveResult.ENEMY;
+                if (map[player.getY() + 1][player.getX()].getMember() instanceof Exit)
+                    result = Living.MoveResult.EXIT;
+                else
+                    result = Living.MoveResult.ENEMY;
             else {
                 player.setY(player.getY() + 1);
                 result = Living.MoveResult.SUCCESS;
             }
         } else if (move.equals(Player.Move.UP) && map[player.getY()][player.getX()].canMoveUp()) { // Move up
             if (map[player.getY() - 1][player.getX()].hasMember())
-                result = Living.MoveResult.ENEMY;
+                if (map[player.getY() - 1][player.getX()].getMember() instanceof Exit)
+                    result = Living.MoveResult.EXIT;
+                else
+                    result = Living.MoveResult.ENEMY;
             else {
                 player.setY(player.getY() - 1);
                 result = Living.MoveResult.SUCCESS;
             }
         } else if (move.equals(Player.Move.RIGHT) && map[player.getY()][player.getX()].canMoveRight()) { // Move right
             if (map[player.getY()][player.getX() + 1].hasMember())
-                result = Living.MoveResult.ENEMY;
+                if (map[player.getY()][player.getX() + 1].getMember() instanceof Exit)
+                    result = Living.MoveResult.EXIT;
+                else
+                    result = Living.MoveResult.ENEMY;
             else {
                 player.setX(player.getX() + 1);
                 result = Living.MoveResult.SUCCESS;
             }
         } else if (move.equals(Player.Move.LEFT) && map[player.getY()][player.getX()].canMoveLeft()) { // Move left
             if (map[player.getY()][player.getX() - 1].hasMember())
-                result = Living.MoveResult.ENEMY;
+                if (map[player.getY()][player.getX() - 1].getMember() instanceof Exit)
+                    result = Living.MoveResult.EXIT;
+                else
+                    result = Living.MoveResult.ENEMY;
             else {
                 player.setX(player.getX() - 1);
                 result = Living.MoveResult.SUCCESS;
@@ -227,7 +242,7 @@ public class Map {
         }
 
         // Generate the maze, recursively
-        generate(1, 1, 0);
+        generate(startX+1, startY+1, 0);
 
         // Build the tileset from the generated wall layouts,
         // starts at 1, 1, and ends 1 early due to padding in the generation
