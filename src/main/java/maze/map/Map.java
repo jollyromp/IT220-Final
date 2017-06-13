@@ -202,7 +202,7 @@ public class Map {
         List<Enemy> enemies = new ArrayList<>();
         for (int h = 0; h < height; h++) {
             for (int w = 0; w < width; w++) {
-                if ((h > 1 && w > 1) && random.nextInt(100) > 65 && (h != exitY && w != exitX)) {
+                if (!(h < startY + 1 && h > startY - 1 && w < startX + 1 && w > startX - 1) && random.nextInt(100) > 65 && (h != exitY && w != exitX)) {
                     Enemy enemy = new Enemy("NEEDS A NAME", Enemy.getRandomIcon(), depth, 10 * depth, 2 * depth);
                     enemy.setX(w);
                     enemy.setY(h);
@@ -242,7 +242,7 @@ public class Map {
         }
 
         // Generate the maze, recursively
-        generate(startX+1, startY+1, 0);
+        generate(startX + 1, startY + 1, 0);
 
         // Build the tileset from the generated wall layouts,
         // starts at 1, 1, and ends 1 early due to padding in the generation
