@@ -243,11 +243,11 @@ public class Map {
                     // get the current layout
                     String layout = tile.getLayout()[row];
                     // If it's the center row and the tile has an entity on it, replace the center with the entity icon
-//                    if (drawHidden && tile.isHidden()) {
-//                        for (int i = 0; i < Tile.tileWidth; i++) {
-//                            drawnMap.append(HIDDEN_TILE);
-//                        }
-//                    } else
+                    if (drawHidden && tile.isHidden()) {
+                        for (int i = 0; i < Tile.tileWidth; i++) {
+                            drawnMap.append(HIDDEN_TILE);
+                        }
+                    } else
                         if (row == Tile.tileVerticalMid && tile.getMember() != null) {
                         drawnMap.append(layout.substring(0, Tile.tileHorizontalMid))
                                 .append(tile.getMember().getIcon())
