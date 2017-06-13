@@ -18,15 +18,23 @@ import java.util.Scanner;
 
 public class Driver {
     private static List<Ability> abilities = new ArrayList<>();
+    private static List<String> enemyNames = new ArrayList<>();
 
     private static Game game;
 
     public static void main(String[] args) {
-        try {
-            Scanner scanner = new Scanner(new File(Driver.class.getResource("/abilities.txt").getFile()));
+        try (Scanner scanner = new Scanner(new File(Driver.class.getResource("/abilities.txt").getFile()))) {
             while (scanner.hasNext()) {
                 String[] segments = scanner.nextLine().split("[,]");
                 abilities.add(new Ability(segments[0], segments[3], Integer.parseInt(segments[1]), Integer.parseInt(segments[2])));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        try (Scanner scanner = new Scanner(new File(Driver.class.getResource("/enemyNames.txt").getFile()))) {
+            while (scanner.hasNext()) {
+                enemyNames.add(scanner.nextLine());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -38,5 +46,9 @@ public class Driver {
 
     public static List<Ability> getAbilities() {
         return abilities;
+    }
+
+    public static List<String> getEnemyNames() {
+        return enemyNames;
     }
 }

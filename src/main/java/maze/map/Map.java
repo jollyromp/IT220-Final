@@ -44,9 +44,6 @@ public class Map {
     private Player player;
     private boolean win;
 
-    private static List<Ability> abilities = new ArrayList<>();
-    private static List<String> enemyNames = new ArrayList<>();
-
     public Map(int width, int height, int depth) {
         this.width = width;
         this.height = height;
@@ -64,20 +61,6 @@ public class Map {
             if (map[randY][randX].getMember() == null) {
                 map[randY][randX].setMember(new Item(RUNE_NAME, RUNE_DESCTIPTION));
             }
-        }
-
-        try {
-            Scanner scanner = new Scanner(new File(Driver.class.getResource("/abilities.txt").getFile()));
-            while (scanner.hasNext()) {
-                String[] segments = scanner.nextLine().split("[,]");
-                abilities.add(new Ability(segments[0], segments[3], Integer.parseInt(segments[1]), Integer.parseInt(segments[2])));
-            }
-            Scanner enemyScanner = new Scanner(new File(Driver.class.getResource("/enemyNames.txt").getFile()));
-            while (enemyScanner.hasNext()) {
-                enemyNames.add(enemyScanner.nextLine());
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
     }
 
@@ -141,14 +124,14 @@ public class Map {
     }
 
     private Living.MoveResult moveCheck(int x, int y) {
-        Living.MoveResult result;
-        if (map[y][x].hasMember())
+        Living.MoveResult result = Living.MoveResult.WALL;
+        if (map[y][x].hasMember()) {
             if (map[y][x].getMember() instanceof Exit) {
                 result = Living.MoveResult.EXIT;
             }
-            if(map[y][x].getMember() instanceof Enemy) {
+            if (map[y][x].getMember() instanceof Enemy) {
                 ConsoleIO.println("You have encountered " + map[y][x].getMember().getName() + "!");
-                CombatEvent combat = new CombatEvent(player, (Enemy)map[y][x].getMember());
+                CombatEvent combat = new CombatEvent(player, (Enemy) map[y][x].getMember());
                 if (combat.combatLoop()) {
                     player.setX(x);
                     player.setY(y);
@@ -158,15 +141,15 @@ public class Map {
                     result = Living.MoveResult.LOSE;
                 }
             }
-            if(map[y][x].getMember() instanceof Item) {
-                pickupItem((Item)map[y][x].getMember());
+            if (map[y][x].getMember() instanceof Item) {
+                pickupItem((Item) map[y][x].getMember());
                 player.levelUp();
                 map[y][x].setMember(null);
                 player.setX(x);
                 player.setY(y);
                 result = Living.MoveResult.SUCCESS;
             }
-        else {
+        } else {
             player.setX(x);
             player.setY(y);
             result = Living.MoveResult.SUCCESS;
@@ -177,7 +160,7 @@ public class Map {
     private void pickupItem(Item item) {
         ConsoleIO.println("You found a " + item.getName(),
                 item.getDescription());
-        Ability newAbility = abilities.get(random.nextInt(abilities.size()));
+        Ability newAbility = Driver.getAbilities().get(random.nextInt(Driver.getAbilities().size()));
         if (player.hasAbility(newAbility.getName())) {
             ConsoleIO.println("You already had the ability " + newAbility.getName());
         } else {
@@ -190,16 +173,16 @@ public class Map {
         Tile currentTile = map[player.getY()][player.getX()];
         currentTile.setHidden(false);
         if (currentTile.canMoveUp()) {
-            map[player.getY()-1][player.getX()].setHidden(false);
+            map[player.getY() - 1][player.getX()].setHidden(false);
         }
         if (currentTile.canMoveDown()) {
-            map[player.getY()+1][player.getX()].setHidden(false);
+            map[player.getY() + 1][player.getX()].setHidden(false);
         }
         if (currentTile.canMoveLeft()) {
-            map[player.getY()][player.getX()-1].setHidden(false);
+            map[player.getY()][player.getX() - 1].setHidden(false);
         }
         if (currentTile.canMoveRight()) {
-            map[player.getY()][player.getX()+1].setHidden(false);
+            map[player.getY()][player.getX() + 1].setHidden(false);
         }
     }
 
@@ -247,8 +230,7 @@ public class Map {
                         for (int i = 0; i < Tile.tileWidth; i++) {
                             drawnMap.append(HIDDEN_TILE);
                         }
-                    } else
-                        if (row == Tile.tileVerticalMid && tile.getMember() != null) {
+                    } else if (row == Tile.tileVerticalMid && tile.getMember() != null) {
                         drawnMap.append(layout.substring(0, Tile.tileHorizontalMid))
                                 .append(tile.getMember().getIcon())
                                 .append(layout.substring(Tile.tileHorizontalMid + 1));
@@ -271,14 +253,14 @@ public class Map {
         for (int h = 0; h < height; h++) {
             for (int w = 0; w < width; w++) {
                 if (!(h < startY + 1 && h > startY - 1 && w < startX + 1 && w > startX - 1) && random.nextInt(100) > 80 && (h != exitY && w != exitX)) {
-                    Enemy enemy = new Enemy(enemyNames.get(random.nextInt(enemyNames.size())),
+                    Enemy enemy = new Enemy(Driver.getEnemyNames().get(random.nextInt(Driver.getEnemyNames().size())),
                             depth,
                             random.nextInt(ENEMY_HEALTH_LIMIT) + 1 + depth,
                             random.nextInt(ENEMY_DAMAGE_LIMIT) + 1 + depth);
                     enemy.setX(w);
                     enemy.setY(h);
-                    for(int i = 0; i < random.nextInt(ENEMY_ABILITY_LIMIT); i++) {
-                        enemy.addAbility(abilities.get(random.nextInt(abilities.size())));
+                    for (int i = 0; i < random.nextInt(ENEMY_ABILITY_LIMIT); i++) {
+                        enemy.addAbility(Driver.getAbilities().get(random.nextInt(Driver.getAbilities().size())));
                     }
                     enemies.add(enemy);
                     map[h][w].setMember(enemy);
@@ -360,7 +342,7 @@ public class Map {
             }
     }
 
-    public Exit getExit(){
+    public Exit getExit() {
         return exit;
     }
 }

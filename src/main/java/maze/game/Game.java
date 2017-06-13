@@ -7,7 +7,10 @@ package maze.game;
  * Final - The game class, runs the loop and manages state
  */
 
-import maze.entity.*;
+import maze.entity.Enemy;
+import maze.entity.Item;
+import maze.entity.Living;
+import maze.entity.Player;
 import maze.io.ConsoleIO;
 import maze.map.Map;
 
@@ -32,7 +35,6 @@ public class Game {
     public Game() {
         init();
         run();
-        save();
         System.exit(0);
     }
 
@@ -56,9 +58,6 @@ public class Game {
                 switch (ConsoleIO.nextLine("What action do you want to take")) {
                     case "quit": // Quit, saves the game
                         quit = true;
-                        break;
-                    case "save": // Save the current game state
-                        save();
                         break;
                     case "map": // Draw explored map
                         ConsoleIO.println(currentMap.map(true));
@@ -109,7 +108,7 @@ public class Game {
         }
     }
 
-    private boolean action(Living.MoveResult result){
+    private boolean action(Living.MoveResult result) {
         switch (result) {
             case WALL:
                 ConsoleIO.println("You can't go that way.");
@@ -130,13 +129,12 @@ public class Game {
     }
 
     private boolean removeEnemy(int x, int y) {
+        Enemy toRemove = null;
         for (Enemy enemy : enemies) {
-            if (enemy.getX() == x && enemy.getY() == y) {
-                enemies.remove(enemy);
-                return true;
-            }
+            if (enemy.getX() == x && enemy.getY() == y)
+                toRemove = enemy;
         }
-        return false;
+        return enemies.remove(toRemove);
     }
 
     private void showHelp() {
@@ -150,24 +148,16 @@ public class Game {
                 "right - to move right if possible",
                 "",
                 ">>> System <<<",
-                "quit - save and quits the game",
-                "save - saves the game",
-                "map - shows the full map that has been explored",
-                "help = shows the help screen",
+                "quit - quit the game",
+                "map - show the full map that has been explored",
+                "help = show the help screen",
                 "",
-                "Map:",
+                "Map Key:",
                 player.getIcon() + ": Player",
                 currentMap.getExit().getIcon() + ": Exit",
                 enemies.get(0).getIcon() + ": Enemy",
                 "\uD83D\uDFA7: Item",
                 ""
         );
-    }
-
-    /**
-     * Save the games state
-     */
-    private void save() {
-        ConsoleIO.println("Saving...", "Done");
     }
 }
