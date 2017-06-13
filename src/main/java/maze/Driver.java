@@ -22,7 +22,6 @@ public class Driver {
     private static Game game;
 
     public static void main(String[] args) {
-
         try {
             Scanner scanner = new Scanner(new File(Driver.class.getResource("/abilities.txt").getFile()));
             while (scanner.hasNext()) {

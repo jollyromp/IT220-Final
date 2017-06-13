@@ -87,6 +87,12 @@ public class Living extends Entity {
         return null;
     }
 
+    public void addAbility(Ability ability) {
+        if (!hasAbility(ability.getName())) {
+            this.abilities.add(ability);
+        }
+    }
+
     public boolean takeDamage(int damage) {
         this.health -= damage;
         if (this.health <= 0)

@@ -7,17 +7,17 @@ package maze.map;
  * IT220-Final - description
  */
 
+import maze.Driver;
 import maze.combat.CombatEvent;
 import maze.entity.Enemy;
 import maze.entity.Exit;
 import maze.entity.Living;
 import maze.entity.Player;
+import maze.entity.abilities.Ability;
 import maze.io.ConsoleIO;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.io.File;
+import java.util.*;
 
 /**
  * Generates a maze and does rendering.
@@ -30,6 +30,10 @@ import java.util.Random;
  */
 public class Map {
 
+    public static final int ENEMY_ABILITY_LIMIT = 6;
+    public static final int ENEMY_HEALTH_LIMIT = 10;
+    public static final int ENEMY_DAMAGE_LIMIT = 4;
+    
     private final char HIDDEN_TILE = '▒';
 
     private boolean[][] north, east, south, west, visited;
@@ -39,6 +43,9 @@ public class Map {
     private Random random = new Random();
     private Player player;
     private boolean win;
+
+    private static List<Ability> abilities = new ArrayList<>();
+    private static List<String> enemyNames = new ArrayList<>();
 
     public Map(int width, int height, int depth) {
         this.width = width;
@@ -50,6 +57,20 @@ public class Map {
 
         map = new Tile[height][width];
         generateTiles();
+
+        try {
+            Scanner scanner = new Scanner(new File(Driver.class.getResource("/abilities.txt").getFile()));
+            while (scanner.hasNext()) {
+                String[] segments = scanner.nextLine().split("[,]");
+                abilities.add(new Ability(segments[0], segments[3], Integer.parseInt(segments[1]), Integer.parseInt(segments[2])));
+            }
+            Scanner enemyScanner = new Scanner(new File(Driver.class.getResource("/enemyNames.txt").getFile()));
+            while (enemyScanner.hasNext()) {
+                enemyNames.add(enemyScanner.nextLine());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void setPlayer(Player player) {
@@ -221,9 +242,15 @@ public class Map {
         for (int h = 0; h < height; h++) {
             for (int w = 0; w < width; w++) {
                 if (!(h < startY + 1 && h > startY - 1 && w < startX + 1 && w > startX - 1) && random.nextInt(100) > 65 && (h != exitY && w != exitX)) {
-                    Enemy enemy = new Enemy("NEEDS A NAME", depth, 10 * depth, 2 * depth);
+                    Enemy enemy = new Enemy(enemyNames.get(random.nextInt(enemyNames.size())),
+                            depth,
+                            random.nextInt(ENEMY_HEALTH_LIMIT) + 1 + depth,
+                            random.nextInt(ENEMY_DAMAGE_LIMIT) + 1 + depth);
                     enemy.setX(w);
                     enemy.setY(h);
+                    for(int i = 0; i < random.nextInt(ENEMY_ABILITY_LIMIT); i++) {
+                        enemy.addAbility(abilities.get(random.nextInt(abilities.size())));
+                    }
                     enemies.add(enemy);
                     map[h][w].setMember(enemy);
                 }

@@ -58,7 +58,9 @@ public class CombatEvent {
         } while(abilityUsed == null);
 
         Ability enemyAbility = enemy.getAbilities().get(random.nextInt(enemy.getAbilities().size()));
-        calculateDamage(enemy, player, enemyAbility);
+        if (enemy.getHealth() > 0) {
+            calculateDamage(enemy, player, enemyAbility);
+        }
 
         return combatLoop();
     }
