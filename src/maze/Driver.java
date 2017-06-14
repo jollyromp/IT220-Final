@@ -27,13 +27,13 @@ public class Driver {
     public static void main(String[] args) {
 
         // Load abilities from file
-        loadFile("/abilities.txt", s -> {
+        loadFile("./res/abilities.txt", s -> {
             String[] segments = s.split("[,]");
             abilities.add(new Ability(segments[0], segments[3], Integer.parseInt(segments[1]), Integer.parseInt(segments[2])));
         });
 
         // Load enemyNames from file
-        loadFile("/enemyNames.txt", enemyNames::add);
+        loadFile("./res/enemyNames.txt", enemyNames::add);
 
         // Start the game
         new Game();
@@ -58,7 +58,7 @@ public class Driver {
      * @param line Operation to preform on each line of the file
      */
     private static void loadFile(String name, Consumer<String> line) {
-        try (Scanner scanner = new Scanner(new File(Driver.class.getResource(name).getFile()))) {
+        try (Scanner scanner = new Scanner(new File(name))) {
             while (scanner.hasNext()) {
                 line.accept(scanner.nextLine());
             }
