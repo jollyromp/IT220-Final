@@ -7,27 +7,41 @@ package maze.entity;
  * IT220-Final - An item object
  */
 
+/**
+ * the item object, contains name icon and description
+ */
 public class Item extends Entity {
 
     private String name;
     private String icon = "\uD83D\uDFA7";
     private String description;
 
+    /**
+     * @param name - name of the item
+     * @param description - description of the item
+     */
     public Item(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
-    @Override
+    /**
+     * @return - returns the name
+     */
     public String getName() {
         return name;
     }
 
-    @Override
+    /**
+     * @return - the icon
+     */
     public String getIcon() {
         return icon;
     }
 
+    /**
+     * @return - description
+     */
     public String getDescription() {
         return description;
     }

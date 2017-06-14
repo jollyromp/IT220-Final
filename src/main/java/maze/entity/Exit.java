@@ -6,21 +6,33 @@ package maze.entity;/*
  * IT220-Final - description
  */
 
+/**
+ * Exit entity, place where player exits to next floor
+ */
 public class Exit extends Entity {
 
     private String name;
     private String icon = "\uD83D\uDF91";
 
+    /**
+     * constructor
+     */
     public Exit() {
         name = "exit";
     }
 
-    @Override
+    /**
+     *
+     * @return name of exit
+     */
     public String getName() {
         return name;
     }
 
-    @Override
+    /**
+     *
+     * @return icon of exit
+     */
     public String getIcon() {
         return icon;
     }

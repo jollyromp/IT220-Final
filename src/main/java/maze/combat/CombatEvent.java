@@ -16,16 +16,28 @@ import maze.io.ConsoleIO;
 import java.io.Console;
 import java.util.Random;
 
+/**
+ * The combat event, which contains the main loop of combat and helper functions
+ */
 public class CombatEvent {
     private Player player;
     private Enemy enemy;
     private Random random = new Random();
 
+    /**
+     * creation of the combat event
+     * @param player - the player information
+     * @param enemy - the information of the enemy they are fighting
+     */
     public CombatEvent(Player player, Enemy enemy) {
         this.player = player;
         this.enemy = enemy;
     }
 
+    /**
+     * a recursive combat loop that runs the combat system and input
+     * @return false if player loses, true if player wins
+     */
     public boolean combatLoop() {
         if (player.getHealth() <= 0) {
             return false;
