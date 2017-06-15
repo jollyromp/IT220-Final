@@ -1,4 +1,3 @@
-![https://api.travis-ci.org/csnoozy/IT220-Final.svg?branch=master](https://api.travis-ci.org/csnoozy/IT220-Final.svg?branch=master)
 # Class: IT220
 **Project**: Final Project
 **Idea**: Turn based maze crawler
